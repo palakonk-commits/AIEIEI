@@ -1,6 +1,6 @@
 // API helper — all backend calls
 
-const BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const BASE = import.meta.env.VITE_API_URL || 'https://aieiei.onrender.com';
 
 const json = (r) => {
   if (!r.ok) throw new Error(`HTTP ${r.status}`);
