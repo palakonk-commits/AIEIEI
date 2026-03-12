@@ -244,6 +244,20 @@ app.post('/api/admin/approve', async (req, res) => {
   }
 });
 
+// DELETE /api/admin/player/:code — delete a player
+app.delete('/api/admin/player/:code', async (req, res) => {
+  if (req.headers['x-admin-password'] !== ADMIN_PASSWORD) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+  try {
+    await pool.query('DELETE FROM players WHERE code = $1', [req.params.code]);
+    res.json({ ok: true });
+  } catch (err) {
+    console.error('admin delete error:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 // ─── Start ───
 app.listen(PORT, async () => {
   await initDB();

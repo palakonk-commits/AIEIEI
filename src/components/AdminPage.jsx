@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { apiAdminAuth, apiAdminPlayers, apiAdminApprove } from '../api';
+import { apiAdminAuth, apiAdminPlayers, apiAdminApprove, apiAdminDelete } from '../api';
 import s from './AdminPage.module.css';
 
 const BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
@@ -47,6 +47,16 @@ export default function AdminPage() {
       loadPlayers();
     } catch {
       alert('ดำเนินการไม่สำเร็จ');
+    }
+  };
+
+  const handleDelete = async (code) => {
+    if (!confirm(`ลบผู้เล่น "${code}" จริงหรือไม่?`)) return;
+    try {
+      await apiAdminDelete(password, code);
+      loadPlayers();
+    } catch {
+      alert('ลบไม่สำเร็จ');
     }
   };
 
@@ -122,12 +132,17 @@ export default function AdminPage() {
                     ผ่าน {(p.solved || []).filter(Boolean).length}/5
                   </p>
                 </div>
-                <span className={`${s.statusBadge} ${s['status_' + p.photo_status]}`}>
-                  {p.photo_status === 'none' && '—'}
-                  {p.photo_status === 'pending' && '⏳ รอตรวจ'}
-                  {p.photo_status === 'approved' && '✅ อนุมัติ'}
-                  {p.photo_status === 'rejected' && '❌ ปฏิเสธ'}
-                </span>
+                <div className={s.cardHeadRight}>
+                  <span className={`${s.statusBadge} ${s['status_' + p.photo_status]}`}>
+                    {p.photo_status === 'none' && '—'}
+                    {p.photo_status === 'pending' && '⏳ รอตรวจ'}
+                    {p.photo_status === 'approved' && '✅ อนุมัติ'}
+                    {p.photo_status === 'rejected' && '❌ ปฏิเสธ'}
+                  </span>
+                  <button className={s.deleteBtn} onClick={() => handleDelete(p.code)} title="ลบผู้เล่น">
+                    🗑
+                  </button>
+                </div>
               </div>
 
               {/* Level progress bar */}

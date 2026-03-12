@@ -81,3 +81,11 @@ export async function apiAdminApprove(password, code, approved) {
     body: JSON.stringify({ code, approved }),
   }).then(json);
 }
+
+/** Delete a player */
+export async function apiAdminDelete(password, code) {
+  return fetch(`${BASE}/api/admin/player/${encodeURIComponent(code)}`, {
+    method: 'DELETE',
+    headers: { 'x-admin-password': password },
+  }).then(json);
+}

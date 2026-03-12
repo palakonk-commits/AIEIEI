@@ -197,117 +197,177 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.6rem;
-  padding: 2.5rem 1rem;
-  background: var(--elevated);
-  border: 2px dashed var(--border-light);
-  border-radius: var(--radius);
+  gap: 0.8rem;
+  padding: 3rem 1.5rem;
+  background: linear-gradient(135deg, rgba(167, 139, 250, 0.06) 0%, rgba(110, 231, 183, 0.06) 100%);
+  border: 2px dashed var(--accent);
+  border-radius: var(--radius-lg);
   cursor: pointer;
-  transition: border-color var(--transition), background var(--transition);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.uploadArea::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(167, 139, 250, 0.08) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.uploadArea:hover::before {
+  opacity: 1;
 }
 
 .uploadArea:hover {
   border-color: var(--accent);
-  background: var(--accent-soft);
+  background: linear-gradient(135deg, rgba(167, 139, 250, 0.1) 0%, rgba(110, 231, 183, 0.1) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(167, 139, 250, 0.12);
 }
 
 .uploadAreaIcon {
-  font-size: 2.2rem;
+  font-size: 3rem;
+  filter: drop-shadow(0 2px 8px rgba(167, 139, 250, 0.3));
 }
 
 .uploadAreaText {
-  font-size: 0.82rem;
+  font-size: 0.88rem;
   color: var(--text-2);
+  font-weight: 500;
 }
 
 .previewWrap {
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: 1rem;
   align-items: center;
 }
 
 .previewImg {
   width: 100%;
   max-width: 300px;
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  border: 2px solid var(--border);
   object-fit: cover;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  transition: transform 0.3s ease;
+}
+
+.previewImg:hover {
+  transform: scale(1.02);
 }
 
 .previewActions {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.6rem;
+  width: 100%;
+  max-width: 300px;
 }
 
 .uploadBtn {
-  padding: 0.6rem 1.2rem;
-  background: var(--accent);
+  flex: 1;
+  padding: 0.75rem 1.4rem;
+  background: linear-gradient(135deg, var(--accent) 0%, #8b5cf6 100%);
   color: #fff;
   border: none;
-  border-radius: var(--radius-sm);
-  font-size: 0.82rem;
-  font-weight: 600;
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: opacity var(--transition);
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 12px rgba(167, 139, 250, 0.3);
+  letter-spacing: 0.02em;
+}
+
+.uploadBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(167, 139, 250, 0.4);
+}
+
+.uploadBtn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(167, 139, 250, 0.25);
 }
 
 .uploadBtn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .uploadBtnSecondary {
-  padding: 0.6rem 1.2rem;
+  flex: 1;
+  padding: 0.75rem 1.4rem;
   background: var(--elevated);
   color: var(--text-2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  font-size: 0.82rem;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background var(--transition);
+  transition: all 0.25s ease;
+  letter-spacing: 0.02em;
 }
 
 .uploadBtnSecondary:hover {
   background: var(--card-hover);
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.uploadBtnSecondary:active {
+  transform: translateY(0);
 }
 
 .uploadStatus {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.6rem;
-  padding: 2rem 1rem;
+  gap: 0.8rem;
+  padding: 2.5rem 1.5rem;
+  background: linear-gradient(135deg, rgba(167, 139, 250, 0.04) 0%, rgba(110, 231, 183, 0.04) 100%);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
 }
 
 .uploadStatusIcon {
-  font-size: 2.5rem;
+  font-size: 3rem;
 }
 
 .uploadStatusText {
-  font-size: 0.88rem;
+  font-size: 0.92rem;
   color: var(--text);
   text-align: center;
-  font-weight: 500;
+  font-weight: 600;
+  line-height: 1.5;
 }
 
 .uploadStatusHint {
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   color: var(--text-3);
 }
 
 .refreshBtn {
-  padding: 0.5rem 1rem;
+  padding: 0.6rem 1.2rem;
   background: var(--elevated);
   color: var(--text-2);
   border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  font-size: 0.78rem;
+  border-radius: var(--radius);
+  font-size: 0.82rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background var(--transition);
+  transition: all 0.25s ease;
   margin-top: 0.4rem;
 }
 
 .refreshBtn:hover {
   background: var(--card-hover);
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-1px);
 }

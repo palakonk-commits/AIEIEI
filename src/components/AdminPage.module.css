@@ -148,6 +148,34 @@
   align-items: flex-start;
 }
 
+.cardHeadRight {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.deleteBtn {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--red-soft);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all var(--transition);
+  opacity: 0.6;
+}
+
+.deleteBtn:hover {
+  opacity: 1;
+  border-color: var(--red);
+  background: rgba(252, 165, 165, 0.2);
+}
+
 .playerCode {
   font-family: var(--mono);
   font-size: 0.9rem;
