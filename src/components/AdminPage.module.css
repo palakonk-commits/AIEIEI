@@ -1,0 +1,254 @@
+/* Admin Page Styles */
+.root {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 1rem 4rem;
+}
+
+/* ── Auth ── */
+.authCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2.5rem 2rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  margin-top: 20vh;
+  width: 100%;
+  max-width: 360px;
+}
+
+.authIcon { font-size: 2.5rem; }
+
+.authTitle {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.authInput {
+  width: 100%;
+  padding: 0.65rem 1rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color var(--transition);
+}
+
+.authInput:focus {
+  border-color: var(--accent);
+}
+
+.authError {
+  font-size: 0.78rem;
+  color: var(--red);
+}
+
+.authBtn {
+  width: 100%;
+  padding: 0.65rem;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ── Header ── */
+.header {
+  text-align: center;
+  padding: 2.5rem 0 1.5rem;
+  width: 100%;
+  max-width: 640px;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.sub {
+  font-size: 0.82rem;
+  color: var(--text-2);
+  margin-top: 0.3rem;
+}
+
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.tab {
+  padding: 0.4rem 1rem;
+  background: var(--elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  color: var(--text-2);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.tab:hover { background: var(--card-hover); }
+
+.tabActive {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.refreshBtn {
+  padding: 0.4rem 0.8rem;
+  background: var(--elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  color: var(--text-3);
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.refreshBtn:hover { background: var(--card-hover); }
+
+/* ── Player List ── */
+.list {
+  width: 100%;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.cardHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.playerCode {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.playerMeta {
+  font-size: 0.72rem;
+  color: var(--text-3);
+  margin-top: 0.15rem;
+}
+
+.statusBadge {
+  font-size: 0.72rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+
+.status_none { background: var(--elevated); color: var(--text-3); }
+.status_pending { background: rgba(250, 204, 21, 0.12); color: #facc15; }
+.status_approved { background: var(--green-soft); color: var(--green); }
+.status_rejected { background: var(--red-soft); color: var(--red); }
+
+/* Progress dots */
+.progressRow {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.dot {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 0.65rem;
+  font-family: var(--mono);
+  background: var(--elevated);
+  border: 1px solid var(--border);
+  color: var(--text-3);
+}
+
+.dotDone {
+  background: var(--green-soft);
+  border-color: var(--green);
+  color: var(--green);
+}
+
+/* Photo section */
+.photoSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.photoImg {
+  max-width: 200px;
+  max-height: 200px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  object-fit: cover;
+}
+
+.photoActions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.approveBtn {
+  padding: 0.4rem 0.8rem;
+  background: var(--green-soft);
+  border: 1px solid var(--green);
+  border-radius: var(--radius-sm);
+  color: var(--green);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.approveBtn:hover { opacity: 0.8; }
+
+.rejectBtn {
+  padding: 0.4rem 0.8rem;
+  background: var(--red-soft);
+  border: 1px solid var(--red);
+  border-radius: var(--radius-sm);
+  color: var(--red);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.rejectBtn:hover { opacity: 0.8; }
+
+.empty {
+  text-align: center;
+  color: var(--text-3);
+  font-size: 0.85rem;
+  padding: 3rem 0;
+}

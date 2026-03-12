@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 280" fill="none">
+  <!-- Background -->
+  <rect width="400" height="280" rx="16" fill="#18181c"/>
+  
+  <!-- Gray figures (back row) -->
+  <!-- Person 1 -->
+  <circle cx="65" cy="105" r="22" fill="#555"/>
+  <rect x="43" y="130" width="44" height="60" rx="10" fill="#555"/>
+  
+  <!-- Person 2 -->
+  <circle cx="140" cy="100" r="22" fill="#555"/>
+  <rect x="118" y="125" width="44" height="60" rx="10" fill="#555"/>
+  
+  <!-- Person 4 -->
+  <circle cx="260" cy="100" r="22" fill="#555"/>
+  <rect x="238" y="125" width="44" height="60" rx="10" fill="#555"/>
+  
+  <!-- Person 5 -->
+  <circle cx="335" cy="105" r="22" fill="#555"/>
+  <rect x="313" y="130" width="44" height="60" rx="10" fill="#555"/>
+  
+  <!-- RED leader (center, front) -->
+  <circle cx="200" cy="80" r="28" fill="#ef4444"/>
+  <rect x="172" y="112" width="56" height="75" rx="12" fill="#ef4444"/>
+  
+  <!-- Arms crossed for red figure -->
+  <rect x="165" y="130" width="70" height="12" rx="6" fill="#dc2626"/>
+  
+  <!-- Text -->
+  <text x="200" y="255" text-anchor="middle" fill="#a0a0b4" font-family="sans-serif" font-size="16" font-weight="600">ใครคือคนที่โดดเด่น?</text>
+</svg>

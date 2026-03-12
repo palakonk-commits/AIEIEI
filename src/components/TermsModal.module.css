@@ -1,0 +1,151 @@
+.root {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.card {
+  width: 100%;
+  max-width: 440px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2rem 1.8rem;
+  text-align: center;
+}
+
+.icon {
+  display: block;
+  font-size: 2.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+
+.hello {
+  font-size: 0.88rem;
+  color: var(--text-2);
+  margin-bottom: 1.2rem;
+}
+
+.hello strong {
+  color: var(--accent);
+}
+
+/* Rules box */
+.rules {
+  background: var(--elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.2rem;
+  text-align: left;
+  margin-bottom: 1.2rem;
+}
+
+.rulesTitle {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.6rem;
+}
+
+.rulesList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.rulesList li {
+  font-size: 0.78rem;
+  color: var(--text-2);
+  line-height: 1.5;
+  padding-left: 1rem;
+  position: relative;
+}
+
+.rulesList li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+}
+
+/* Warning box */
+.warning {
+  background: var(--red-soft);
+  border: 1px solid rgba(252, 165, 165, 0.2);
+  border-radius: var(--radius);
+  padding: 0.8rem 1rem;
+  text-align: left;
+  margin-bottom: 1.2rem;
+}
+
+.warningTitle {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--red);
+  margin-bottom: 0.3rem;
+}
+
+.warningText {
+  font-size: 0.75rem;
+  color: var(--text-2);
+  line-height: 1.55;
+}
+
+.warningText strong {
+  color: var(--red);
+}
+
+/* Checkbox */
+.checkRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+}
+
+.checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.checkLabel {
+  font-size: 0.82rem;
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* Button */
+.btn {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  background: var(--accent);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: opacity var(--transition);
+}
+
+.btn:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.btnDisabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}

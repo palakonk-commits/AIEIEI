@@ -1,0 +1,176 @@
+import { useState, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { apiAdminAuth, apiAdminPlayers, apiAdminApprove } from '../api';
+import s from './AdminPage.module.css';
+
+const BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+
+export default function AdminPage() {
+  const [password, setPassword] = useState('');
+  const [authed, setAuthed] = useState(false);
+  const [authError, setAuthError] = useState('');
+  const [players, setPlayers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [tab, setTab] = useState('all'); // 'all' | 'pending'
+
+  const loadPlayers = useCallback(async () => {
+    if (!password) return;
+    setLoading(true);
+    try {
+      const data = await apiAdminPlayers(password);
+      setPlayers(data);
+    } catch {
+      alert('โหลดข้อมูลไม่สำเร็จ');
+    } finally {
+      setLoading(false);
+    }
+  }, [password]);
+
+  const handleAuth = async (e) => {
+    e.preventDefault();
+    setAuthError('');
+    try {
+      await apiAdminAuth(password);
+      setAuthed(true);
+    } catch {
+      setAuthError('รหัสผ่านไม่ถูกต้อง');
+    }
+  };
+
+  useEffect(() => {
+    if (authed) loadPlayers();
+  }, [authed, loadPlayers]);
+
+  const handleApprove = async (code, approved) => {
+    try {
+      await apiAdminApprove(password, code, approved);
+      loadPlayers();
+    } catch {
+      alert('ดำเนินการไม่สำเร็จ');
+    }
+  };
+
+  const photoUrl = (code) =>
+    `${BASE}/api/admin/photo/${encodeURIComponent(code)}?p=${encodeURIComponent(password)}`;
+
+  if (!authed) {
+    return (
+      <div className={s.root}>
+        <motion.form
+          className={s.authCard}
+          onSubmit={handleAuth}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <span className={s.authIcon}>🔐</span>
+          <h1 className={s.authTitle}>Admin Panel</h1>
+          <input
+            className={s.authInput}
+            type="password"
+            placeholder="รหัสผ่าน Admin"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            autoFocus
+          />
+          {authError && <p className={s.authError}>{authError}</p>}
+          <button className={s.authBtn} type="submit">เข้าสู่ระบบ</button>
+        </motion.form>
+      </div>
+    );
+  }
+
+  const filtered = tab === 'pending'
+    ? players.filter(p => p.photo_status === 'pending')
+    : players;
+
+  const pendingCount = players.filter(p => p.photo_status === 'pending').length;
+
+  return (
+    <div className={s.root}>
+      <header className={s.header}>
+        <h1 className={s.title}>🛠 Admin Panel</h1>
+        <p className={s.sub}>{players.length} ผู้เล่นทั้งหมด · {pendingCount} รอตรวจ</p>
+        <div className={s.tabs}>
+          <button className={`${s.tab} ${tab === 'all' ? s.tabActive : ''}`} onClick={() => setTab('all')}>
+            ทั้งหมด ({players.length})
+          </button>
+          <button className={`${s.tab} ${tab === 'pending' ? s.tabActive : ''}`} onClick={() => setTab('pending')}>
+            รอตรวจ ({pendingCount})
+          </button>
+          <button className={s.refreshBtn} onClick={loadPlayers} disabled={loading}>
+            🔄 {loading ? 'กำลังโหลด...' : 'รีเฟรช'}
+          </button>
+        </div>
+      </header>
+
+      <div className={s.list}>
+        <AnimatePresence>
+          {filtered.map((p) => (
+            <motion.div
+              key={p.code}
+              className={s.card}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+            >
+              <div className={s.cardHead}>
+                <div>
+                  <p className={s.playerCode}>{p.code}</p>
+                  <p className={s.playerMeta}>
+                    {p.accepted_terms ? '✅ ยอมรับเงื่อนไข' : '⏳ ยังไม่ยอมรับ'}
+                    {' · '}
+                    ผ่าน {(p.solved || []).filter(Boolean).length}/5
+                  </p>
+                </div>
+                <span className={`${s.statusBadge} ${s['status_' + p.photo_status]}`}>
+                  {p.photo_status === 'none' && '—'}
+                  {p.photo_status === 'pending' && '⏳ รอตรวจ'}
+                  {p.photo_status === 'approved' && '✅ อนุมัติ'}
+                  {p.photo_status === 'rejected' && '❌ ปฏิเสธ'}
+                </span>
+              </div>
+
+              {/* Level progress bar */}
+              <div className={s.progressRow}>
+                {(p.solved || []).map((done, i) => (
+                  <div key={i} className={`${s.dot} ${done ? s.dotDone : ''}`}>
+                    {i + 1}
+                  </div>
+                ))}
+              </div>
+
+              {/* Photo section if uploaded */}
+              {p.photo_status !== 'none' && p.photo_mime && (
+                <div className={s.photoSection}>
+                  <img
+                    src={photoUrl(p.code)}
+                    alt="uploaded"
+                    className={s.photoImg}
+                    onError={(e) => { e.target.style.display = 'none'; }}
+                    // Pass password via fetch if needed — for now direct URL
+                  />
+                  {p.photo_status === 'pending' && (
+                    <div className={s.photoActions}>
+                      <button className={s.approveBtn} onClick={() => handleApprove(p.code, true)}>
+                        ✅ อนุมัติ
+                      </button>
+                      <button className={s.rejectBtn} onClick={() => handleApprove(p.code, false)}>
+                        ❌ ปฏิเสธ
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </motion.div>
+          ))}
+        </AnimatePresence>
+
+        {filtered.length === 0 && (
+          <p className={s.empty}>
+            {tab === 'pending' ? 'ไม่มีรูปที่รอตรวจ' : 'ยังไม่มีผู้เล่น'}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}

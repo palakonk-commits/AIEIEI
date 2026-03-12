@@ -1,0 +1,313 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+/* Image display */
+.imageWrap {
+  display: flex;
+  justify-content: center;
+  padding: 0.5rem 0;
+}
+
+.levelImage {
+  width: 100%;
+  max-width: 320px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+/* Code block for Level 4 */
+.codeBlock {
+  background: var(--elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.8rem 1rem;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--green);
+  white-space: pre-wrap;
+  line-height: 1.6;
+  overflow-x: auto;
+}
+
+/* Question */
+.question {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text);
+  white-space: pre-line;
+}
+
+.tip {
+  font-size: 0.72rem;
+  color: var(--text-3);
+}
+
+/* Choice buttons */
+.choices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.choice {
+  padding: 0.7rem 0.6rem;
+  background: var(--elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-size: 0.84rem;
+  text-align: center;
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.choice:hover {
+  background: var(--card-hover);
+  border-color: var(--border-light);
+}
+
+.choiceWrong {
+  border-color: var(--red) !important;
+  background: var(--red-soft) !important;
+  animation: shake 0.4s ease;
+}
+
+.choiceHidden {
+  grid-column: 1 / -1;
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.choiceHidden:hover {
+  background: var(--accent-mid);
+}
+
+.hiddenHint {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-3);
+  padding: 0.3rem 0;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+/* PIN unlock for Level 3 */
+.pinBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1.2rem;
+  background: var(--elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.pinLabel {
+  font-size: 0.82rem;
+  color: var(--text-2);
+  text-align: center;
+}
+
+.pinInput {
+  width: 200px;
+  padding: 0.65rem 1rem;
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 1.3rem;
+  letter-spacing: 0.4em;
+  text-align: center;
+  transition: border-color var(--transition);
+  outline: none;
+}
+
+.pinInput:focus {
+  border-color: var(--accent);
+}
+
+.pinHint {
+  font-size: 0.7rem;
+  color: var(--text-3);
+}
+
+/* Locked level */
+.lockedBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 2rem 1rem;
+}
+
+.lockedIcon {
+  font-size: 2.5rem;
+  opacity: 0.5;
+}
+
+.lockedText {
+  font-size: 0.85rem;
+  color: var(--text-3);
+  text-align: center;
+}
+
+/* Busy spinner */
+.busy {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.6rem;
+  font-size: 0.8rem;
+  color: var(--text-2);
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Upload Level (Level 5) ── */
+.uploadDesc {
+  font-size: 0.82rem;
+  color: var(--text-2);
+  line-height: 1.6;
+}
+
+.uploadArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 2.5rem 1rem;
+  background: var(--elevated);
+  border: 2px dashed var(--border-light);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: border-color var(--transition), background var(--transition);
+}
+
+.uploadArea:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.uploadAreaIcon {
+  font-size: 2.2rem;
+}
+
+.uploadAreaText {
+  font-size: 0.82rem;
+  color: var(--text-2);
+}
+
+.previewWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.previewImg {
+  width: 100%;
+  max-width: 300px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  object-fit: cover;
+}
+
+.previewActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.uploadBtn {
+  padding: 0.6rem 1.2rem;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity var(--transition);
+}
+
+.uploadBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.uploadBtnSecondary {
+  padding: 0.6rem 1.2rem;
+  background: var(--elevated);
+  color: var(--text-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+.uploadBtnSecondary:hover {
+  background: var(--card-hover);
+}
+
+.uploadStatus {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 2rem 1rem;
+}
+
+.uploadStatusIcon {
+  font-size: 2.5rem;
+}
+
+.uploadStatusText {
+  font-size: 0.88rem;
+  color: var(--text);
+  text-align: center;
+  font-weight: 500;
+}
+
+.uploadStatusHint {
+  font-size: 0.75rem;
+  color: var(--text-3);
+}
+
+.refreshBtn {
+  padding: 0.5rem 1rem;
+  background: var(--elevated);
+  color: var(--text-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: background var(--transition);
+  margin-top: 0.4rem;
+}
+
+.refreshBtn:hover {
+  background: var(--card-hover);
+}

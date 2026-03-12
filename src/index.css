@@ -1,0 +1,82 @@
+/* ═══════════════════════════════════════════
+   index.css — total reset + design tokens
+   Soft dark, generous whitespace, no glow
+═══════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #101014;
+  --card: #18181c;
+  --card-hover: #1e1e24;
+  --elevated: #222228;
+  --border: #2a2a32;
+  --border-light: #33333d;
+
+  --text: #eaeaf0;
+  --text-2: #a0a0b4;
+  --text-3: #64647a;
+
+  --accent: #a78bfa;
+  --accent-soft: rgba(167, 139, 250, 0.12);
+  --accent-mid: rgba(167, 139, 250, 0.25);
+  --green: #6ee7b7;
+  --green-soft: rgba(110, 231, 183, 0.12);
+  --red: #fca5a5;
+  --red-soft: rgba(252, 165, 165, 0.1);
+  --blue: #93c5fd;
+
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-lg: 16px;
+  --radius-full: 999px;
+
+  --font: 'Noto Sans Thai', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+
+  --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  line-height: 1.6;
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-light);
+  border-radius: 2px;
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+input {
+  font-family: var(--mono);
+}
