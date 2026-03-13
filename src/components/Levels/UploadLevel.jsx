@@ -69,13 +69,13 @@ export default function UploadLevel({ level, playerCode, photoStatus, onRefresh 
   return (
     <div className={s.section}>
       <p className={s.question}>{level.question}</p>
-      <p className={s.uploadDesc}>📸 ถ่ายรูปคู่กับรุ่นพี่ของคุณแล้วอัปโหลดมาเลย!</p>
-
+      <p className={s.uploadDesc}>📷 ถ่ายรูปคู่กับรุ่นพี่ของคุณแล้วอัปโหลดมาเลย!</p>
+      
       <input
         ref={inputRef}
         type="file"
         accept="image/*"
-        capture="environment"
+        capture="camera"
         onChange={handleFile}
         style={{ display: 'none' }}
       />
@@ -104,8 +104,8 @@ export default function UploadLevel({ level, playerCode, photoStatus, onRefresh 
           animate={{ opacity: 1, y: 0 }}
           whileTap={{ scale: 0.97 }}
         >
-          <span className={s.uploadAreaIcon}>📷</span>
-          <span className={s.uploadAreaText}>แตะเพื่อถ่ายรูป / เลือกรูป</span>
+          <span className={s.uploadAreaIcon}>📸</span>
+          <span className={s.uploadAreaText}>แตะเพื่อเปิดกล้องถ่ายรูป</span>
         </motion.button>
       )}
     </div>

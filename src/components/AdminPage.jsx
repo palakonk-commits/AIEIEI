@@ -12,6 +12,7 @@ export default function AdminPage() {
   const [players, setPlayers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [tab, setTab] = useState('all'); // 'all' | 'pending'
+  const [expandedId, setExpandedId] = useState(null); // Keep track of which card is expanded
 
   const loadPlayers = useCallback(async () => {
     if (!password) return;
@@ -123,7 +124,7 @@ export default function AdminPage() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
             >
-              <div className={s.cardHead}>
+              <div className={s.cardHead} onClick={() => setExpandedId(expandedId === p.code ? null : p.code)} style={{ cursor: 'pointer' }}>
                 <div>
                   <p className={s.playerCode}>{p.code}</p>
                   <p className={s.playerMeta}>
@@ -146,20 +147,38 @@ export default function AdminPage() {
               </div>
 
               {/* Level progress bar & answers */}
-              <div className={s.progressRow}>
-                {(p.solved || []).map((done, i) => (
-                  <div key={i} className={s.levelBox}>
-                    <div className={`${s.dot} ${done ? s.dotDone : ''}`}>
-                      {i + 1}
+              {expandedId === p.code ? (
+                <div className={s.expandedAnswers}>
+                  <p style={{ fontWeight: 'bold', marginBottom: '8px' }}>รายการคำตอบ:</p>
+                  {(p.solved || []).map((done, i) => (
+                    <div key={i} style={{ marginBottom: '6px', fontSize: '0.9rem', color: '#ccc' }}>
+                      <span style={{ color: done ? '#4ade80' : '#888', marginRight: '8px' }}>
+                        {done ? '✅' : '⏳'} Level {i + 1}:
+                      </span>
+                      {p.answers && p.answers[i] ? (
+                        <span style={{ color: '#fff' }}>{p.answers[i]}</span>
+                      ) : done && i === 4 ? (
+                        <span style={{ color: '#fff' }}>อัปโหลดรูปภาพแล้ว</span>
+                      ) : done ? (
+                        <span style={{ color: '#ffb86c', fontStyle: 'italic' }}>ไม่มีข้อมูลคำตอบ</span>
+                      ) : (
+                        <span style={{ color: '#666', fontStyle: 'italic' }}>ยังไม่ผ่าน</span>
+                      )}
                     </div>
-                    {p.answers && p.answers[i] ? (
-                      <span className={s.answerText}>💬 {p.answers[i]}</span>
-                    ) : done && i === 4 ? (
-                      <span className={s.answerText}>📸 ส่งรูปแล้ว</span>
-                    ) : null}
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              ) : (
+                <div className={s.progressRow}>
+                  {(p.solved || []).map((done, i) => (
+                    <div key={i} className={s.levelBox}>
+                      <div className={`${s.dot} ${done ? s.dotDone : ''}`}>
+                        {i + 1}
+                      </div>
+                    </div>
+                  ))}
+                  <div style={{ marginLeft: '10px', fontSize: '0.8rem', color: '#888' }}>{'คลิกเพื่อดูคำตอบ ⬇️'}</div>
+                </div>
+              )}
 
               {/* Photo section if uploaded */}
               {p.photo_status !== 'none' && p.photo_mime && (
