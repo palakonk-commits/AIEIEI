@@ -123,8 +123,10 @@ export default function AdminPage() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
+              onClick={() => setExpandedId(expandedId === p.code ? null : p.code)}
+              style={{ cursor: 'pointer' }}
             >
-              <div className={s.cardHead} onClick={() => setExpandedId(expandedId === p.code ? null : p.code)} style={{ cursor: 'pointer' }}>
+              <div className={s.cardHead}>
                 <div>
                   <p className={s.playerCode}>{p.code}</p>
                   <p className={s.playerMeta}>
@@ -140,15 +142,15 @@ export default function AdminPage() {
                     {p.photo_status === 'approved' && '✅ อนุมัติ'}
                     {p.photo_status === 'rejected' && '❌ ปฏิเสธ'}
                   </span>
-                  <button className={s.deleteBtn} onClick={() => handleDelete(p.code)} title="ลบผู้เล่น">
-                    🗑
+                  <button className={s.deleteBtn} onClick={(e) => { e.stopPropagation(); handleDelete(p.code); }} title="ลบผู้เล่น">
+                    🗑️
                   </button>
                 </div>
               </div>
 
               {/* Level progress bar & answers */}
               {expandedId === p.code ? (
-                <div className={s.expandedAnswers}>
+                <div className={s.expandedAnswers} onClick={(e) => e.stopPropagation()}>
                   <p style={{ fontWeight: 'bold', marginBottom: '8px' }}>รายการคำตอบ:</p>
                   {(p.solved || []).map((done, i) => (
                     <div key={i} style={{ marginBottom: '6px', fontSize: '0.9rem', color: '#ccc' }}>
@@ -169,33 +171,25 @@ export default function AdminPage() {
                 </div>
               ) : (
                 <div className={s.progressRow}>
-                  {(p.solved || []).map((done, i) => (
-                    <div key={i} className={s.levelBox}>
-                      <div className={`${s.dot} ${done ? s.dotDone : ''}`}>
-                        {i + 1}
-                      </div>
-                    </div>
-                  ))}
-                  <div style={{ marginLeft: '10px', fontSize: '0.8rem', color: '#888' }}>{'คลิกเพื่อดูคำตอบ ⬇️'}</div>
+                  <div style={{ fontSize: '0.85rem', color: '#888', fontStyle: 'italic' }}>ดูรายละเอียดเพิ่มเติม ⬇️</div>
                 </div>
               )}
 
               {/* Photo section if uploaded */}
-              {p.photo_status !== 'none' && p.photo_mime && (
-                <div className={s.photoSection}>
+              {expandedId === p.code && p.photo_status !== 'none' && p.photo_mime && (
+                <div className={s.photoSection} onClick={(e) => e.stopPropagation()}>
                   <img
                     src={photoUrl(p.code)}
                     alt="uploaded"
                     className={s.photoImg}
                     onError={(e) => { e.target.style.display = 'none'; }}
-                    // Pass password via fetch if needed — for now direct URL
                   />
                   {p.photo_status === 'pending' && (
                     <div className={s.photoActions}>
-                      <button className={s.approveBtn} onClick={() => handleApprove(p.code, true)}>
+                      <button className={s.approveBtn} onClick={(e) => { e.stopPropagation(); handleApprove(p.code, true); }}>
                         ✅ อนุมัติ
                       </button>
-                      <button className={s.rejectBtn} onClick={() => handleApprove(p.code, false)}>
+                      <button className={s.rejectBtn} onClick={(e) => { e.stopPropagation(); handleApprove(p.code, false); }}>
                         ❌ ปฏิเสธ
                       </button>
                     </div>
