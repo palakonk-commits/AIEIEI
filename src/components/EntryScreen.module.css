@@ -85,3 +85,73 @@
 .btn:hover {
   opacity: 0.9;
 }
+
+/* ── Loading State ── */
+.loadingBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+.loadingIcon {
+  font-size: 3rem;
+  color: var(--accent);
+}
+
+.loadingTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-top: 0.5rem;
+}
+
+.loadingSub {
+  font-size: 0.85rem;
+  color: var(--text-2);
+}
+
+.loadingSub span {
+  color: var(--accent);
+  font-weight: 700;
+  font-family: var(--mono);
+}
+
+.progressWrap {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.progressBar {
+  width: 100%;
+  height: 8px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  position: relative;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent) 0%, #8b5cf6 100%);
+  border-radius: var(--radius-full);
+  box-shadow: 0 0 10px rgba(167, 139, 250, 0.5);
+}
+
+.progressText {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--accent);
+  margin-top: 0.5rem;
+  text-align: right;
+  font-weight: 600;
+}
+
+.loadingDesc {
+  font-size: 0.75rem;
+  color: var(--text-3);
+  margin-top: 0.5rem;
+  height: 1rem;
+}

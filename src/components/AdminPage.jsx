@@ -145,11 +145,18 @@ export default function AdminPage() {
                 </div>
               </div>
 
-              {/* Level progress bar */}
+              {/* Level progress bar & answers */}
               <div className={s.progressRow}>
                 {(p.solved || []).map((done, i) => (
-                  <div key={i} className={`${s.dot} ${done ? s.dotDone : ''}`}>
-                    {i + 1}
+                  <div key={i} className={s.levelBox}>
+                    <div className={`${s.dot} ${done ? s.dotDone : ''}`}>
+                      {i + 1}
+                    </div>
+                    {p.answers && p.answers[i] ? (
+                      <span className={s.answerText}>💬 {p.answers[i]}</span>
+                    ) : done && i === 4 ? (
+                      <span className={s.answerText}>📸 ส่งรูปแล้ว</span>
+                    ) : null}
                   </div>
                 ))}
               </div>

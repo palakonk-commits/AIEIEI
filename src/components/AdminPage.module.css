@@ -204,7 +204,18 @@
 /* Progress dots */
 .progressRow {
   display: flex;
-  gap: 0.35rem;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: var(--bg);
+  padding: 0.8rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+}
+
+.levelBox {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
 }
 
 .dot {
@@ -219,6 +230,7 @@
   background: var(--elevated);
   border: 1px solid var(--border);
   color: var(--text-3);
+  flex-shrink: 0;
 }
 
 .dotDone {
@@ -226,6 +238,17 @@
   border-color: var(--green);
   color: var(--green);
 }
+
+.answerText {
+  font-size: 0.8rem;
+  color: var(--text-2);
+  background: var(--elevated);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  word-break: break-word;
+}
+
 
 /* Photo section */
 .photoSection {

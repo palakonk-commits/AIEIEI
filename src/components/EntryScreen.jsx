@@ -1,16 +1,47 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import s from './EntryScreen.module.css';
 
 export default function EntryScreen({ onSubmit, busy: parentBusy, error: parentError }) {
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
+  const [loadingCode, setLoadingCode] = useState(null);
+  const [progress, setProgress] = useState(0);
 
   const displayError = parentError || error;
 
+  // Reset loading state if parent gives an error back
+  useEffect(() => {
+    if (parentError && loadingCode) {
+      setLoadingCode(null);
+      setProgress(0);
+    }
+  }, [parentError]);
+
+  useEffect(() => {
+    if (loadingCode) {
+      let current = 0;
+      const interval = setInterval(() => {
+        // Random increment between 5 and 20
+        current += Math.floor(Math.random() * 15) + 5;
+        if (current >= 100) {
+          current = 100;
+          setProgress(100);
+          clearInterval(interval);
+          setTimeout(() => {
+            onSubmit(loadingCode);
+          }, 400); // Wait a bit at 100% before submitting
+        } else {
+          setProgress(current);
+        }
+      }, 150);
+      return () => clearInterval(interval);
+    }
+  }, [loadingCode, onSubmit]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (parentBusy) return;
+    if (parentBusy || loadingCode) return;
     const trimmed = code.trim();
     if (!trimmed) {
       setError('กรุณาใส่รหัสนักศึกษาหรือชื่อเล่น');
@@ -20,8 +51,51 @@ export default function EntryScreen({ onSubmit, busy: parentBusy, error: parentE
       setError('กรุณาใส่อย่างน้อย 2 ตัวอักษร');
       return;
     }
-    onSubmit(trimmed);
+    setLoadingCode(trimmed);
   };
+
+  if (loadingCode) {
+    return (
+      <div className={s.root}>
+        <motion.div
+          className={s.card}
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+        >
+          <div className={s.loadingBox}>
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
+              className={s.loadingIcon}
+            >
+              ⚙️
+            </motion.div>
+            <h2 className={s.loadingTitle}>กำลังเชื่อมต่อเข้าสู่ระบบ...</h2>
+            <p className={s.loadingSub}>เตรียมพร้อมภารกิจ P'Code สำหรับ <span>{loadingCode}</span></p>
+            
+            <div className={s.progressWrap}>
+              <div className={s.progressBar}>
+                <motion.div
+                  className={s.progressFill}
+                  initial={{ width: 0 }}
+                  animate={{ width: `${progress}%` }}
+                  transition={{ ease: "easeOut" }}
+                />
+              </div>
+              <p className={s.progressText}>{progress}%</p>
+            </div>
+            
+            <p className={s.loadingDesc}>
+              {progress < 30 && 'กำลังดาวน์โหลดข้อมูลภารกิจ...'}
+              {progress >= 30 && progress < 70 && 'กำลังถอดรหัสระบบ...'}
+              {progress >= 70 && progress < 100 && 'เชื่อมต่อฐานข้อมูล...'}
+              {progress === 100 && 'เสร็จสิ้น!'}
+            </p>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
     <div className={s.root}>

@@ -39,6 +39,7 @@ async function initDB() {
       code VARCHAR(100) UNIQUE NOT NULL,
       accepted_terms BOOLEAN DEFAULT false,
       solved JSONB DEFAULT '[]',
+      answers JSONB DEFAULT '[]',
       photo BYTEA,
       photo_mime VARCHAR(50),
       photo_status VARCHAR(20) DEFAULT 'none',
@@ -46,6 +47,14 @@ async function initDB() {
       updated_at TIMESTAMP DEFAULT NOW()
     )
   `);
+  
+  // Migration: Add answers column if it doesn't exist
+  try {
+    await pool.query(`ALTER TABLE players ADD COLUMN IF NOT EXISTS answers JSONB DEFAULT '[]'`);
+  } catch (e) {
+    console.log('Migration answers column already exists or error:', e.message);
+  }
+
   console.log('✅ Database ready');
 }
 
@@ -119,21 +128,28 @@ app.get('/api/progress/:code', async (req, res) => {
 // POST /api/solve — mark a level as solved
 app.post('/api/solve', async (req, res) => {
   try {
-    const { code, levelIdx } = req.body;
-    const result = await pool.query('SELECT solved FROM players WHERE code = $1', [code]);
+    const { code, levelIdx, answer } = req.body;
+    const result = await pool.query('SELECT solved, answers FROM players WHERE code = $1', [code]);
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'ไม่พบผู้เล่น' });
     }
 
     const solved = result.rows[0].solved;
+    const answers = result.rows[0].answers || [null, null, null, null, null];
+    
     if (levelIdx >= 0 && levelIdx < solved.length) {
       solved[levelIdx] = true;
+      if (answer !== undefined) {
+        while (answers.length <= levelIdx) answers.push(null);
+        answers[levelIdx] = answer;
+      }
+      
       await pool.query(
-        'UPDATE players SET solved = $1, updated_at = NOW() WHERE code = $2',
-        [JSON.stringify(solved), code]
+        'UPDATE players SET solved = $1, answers = $2, updated_at = NOW() WHERE code = $3',
+        [JSON.stringify(solved), JSON.stringify(answers), code]
       );
     }
-    res.json({ solved });
+    res.json({ solved, answers });
   } catch (err) {
     console.error('solve error:', err);
     res.status(500).json({ error: 'Server error' });
@@ -178,7 +194,7 @@ app.get('/api/admin/players', async (req, res) => {
   }
   try {
     const result = await pool.query(
-      'SELECT code, accepted_terms, solved, photo_status, photo_mime, created_at, updated_at FROM players ORDER BY created_at DESC'
+      'SELECT code, accepted_terms, solved, answers, photo_status, photo_mime, created_at, updated_at FROM players ORDER BY created_at DESC'
     );
     res.json(result.rows);
   } catch (err) {

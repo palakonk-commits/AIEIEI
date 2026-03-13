@@ -31,9 +31,9 @@ export default function ChoiceLevel({ level, busy, result, onChoice }) {
       setWrongIdx(isHidden ? 'hidden' : i);
       setWrongCount(c => c + 1);
       setTimeout(() => setWrongIdx(null), 600);
-      onChoice(false);
+      onChoice(false, ch.text);
     } else {
-      onChoice(true);
+      onChoice(true, ch.text);
     }
   };
 

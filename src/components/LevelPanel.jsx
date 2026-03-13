@@ -18,9 +18,9 @@ const panel = {
 export default function LevelPanel({ level, idx, done, busy, onClose, onCheckChoice, playerCode, photoStatus, onRefresh }) {
   const [result, setResult] = useState(null); // null | 'ok' | 'wrong'
 
-  const handleChoice = (ok) => {
+  const handleChoice = (ok, answerText) => {
     if (busy) return;
-    onCheckChoice(ok, (r) => setResult(r));
+    onCheckChoice(ok, answerText, (r) => setResult(r));
   };
 
   const isLocked = level.type === 'locked';

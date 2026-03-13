@@ -110,7 +110,7 @@ export default function App() {
             playerCode={playerCode}
             photoStatus={photoStatus}
             onClose={close}
-            onCheckChoice={(ok, cb) => checkChoice(activeIdx, ok, cb)}
+            onCheckChoice={(ok, answerText, cb) => checkChoice(activeIdx, ok, answerText, cb)}
             onRefresh={refreshProgress}
           />
         )}

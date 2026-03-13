@@ -31,11 +31,11 @@ export async function apiProgress(code) {
 }
 
 /** Mark a level as solved */
-export async function apiSolve(code, levelIdx) {
+export async function apiSolve(code, levelIdx, answer) {
   return fetch(`${BASE}/api/solve`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ code, levelIdx }),
+    body: JSON.stringify({ code, levelIdx, answer }),
   }).then(json);
 }
 

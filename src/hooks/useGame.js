@@ -31,21 +31,21 @@ export default function useGame(playerCode) {
   const open = useCallback((id) => setActiveId(id), []);
   const close = useCallback(() => setActiveId(null), []);
 
-  const solve = useCallback((idx) => {
+  const solve = useCallback((idx, answerText) => {
     setSolved((prev) => {
       const next = [...prev];
       next[idx] = true;
       return next;
     });
     // Fire-and-forget save to backend
-    if (playerCode) apiSolve(playerCode, idx).catch(() => {});
+    if (playerCode) apiSolve(playerCode, idx, answerText).catch(() => {});
   }, [playerCode]);
 
-  const checkChoice = useCallback((idx, isCorrect, cb) => {
+  const checkChoice = useCallback((idx, isCorrect, answerText, cb) => {
     if (!isCorrect) { cb('wrong'); return; }
     setBusy(true);
     setTimeout(() => {
-      solve(idx);
+      solve(idx, answerText);
       cb('ok');
       setBusy(false);
     }, 1200);
