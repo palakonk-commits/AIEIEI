@@ -75,7 +75,6 @@ export default function UploadLevel({ level, playerCode, photoStatus, onRefresh 
         ref={inputRef}
         type="file"
         accept="image/*"
-        capture="camera"
         onChange={handleFile}
         style={{ display: 'none' }}
       />
@@ -105,7 +104,7 @@ export default function UploadLevel({ level, playerCode, photoStatus, onRefresh 
           whileTap={{ scale: 0.97 }}
         >
           <span className={s.uploadAreaIcon}>📸</span>
-          <span className={s.uploadAreaText}>แตะเพื่อเปิดกล้องถ่ายรูป</span>
+          <span className={s.uploadAreaText}>แตะเพื่อถ่ายรูป / เลือกรูปภาพ</span>
         </motion.button>
       )}
     </div>
