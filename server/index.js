@@ -51,6 +51,8 @@ async function initDB() {
   // Migration: Add answers column if it doesn't exist
   try {
     await pool.query(`ALTER TABLE players ADD COLUMN IF NOT EXISTS answers JSONB DEFAULT '[]'`);
+    await pool.query(`ALTER TABLE players ADD COLUMN IF NOT EXISTS reg_photo BYTEA`);
+    await pool.query(`ALTER TABLE players ADD COLUMN IF NOT EXISTS reg_photo_mime VARCHAR(50)`);
   } catch (e) {
     console.log('Migration answers column already exists or error:', e.message);
   }
@@ -94,13 +96,22 @@ app.post('/api/login', async (req, res) => {
 });
 
 // POST /api/accept-terms
-app.post('/api/accept-terms', async (req, res) => {
+app.post('/api/accept-terms', upload.single('photo'), async (req, res) => {
   try {
-    const { code } = req.body;
-    await pool.query(
-      'UPDATE players SET accepted_terms = true, updated_at = NOW() WHERE code = $1',
-      [code]
-    );
+    const code = req.body.code;
+    const file = req.file;
+
+    if (file) {
+      await pool.query(
+        'UPDATE players SET accepted_terms = true, reg_photo = $1, reg_photo_mime = $2, updated_at = NOW() WHERE code = $3',
+        [file.buffer, file.mimetype, code]
+      );
+    } else {
+      await pool.query(
+        'UPDATE players SET accepted_terms = true, updated_at = NOW() WHERE code = $1',
+        [code]
+      );
+    }
     res.json({ ok: true });
   } catch (err) {
     console.error('accept-terms error:', err);
@@ -194,7 +205,7 @@ app.get('/api/admin/players', async (req, res) => {
   }
   try {
     const result = await pool.query(
-      'SELECT code, accepted_terms, solved, answers, photo_status, photo_mime, created_at, updated_at FROM players ORDER BY created_at DESC'
+      'SELECT code, accepted_terms, solved, answers, photo_status, photo_mime, reg_photo_mime, created_at, updated_at FROM players ORDER BY created_at DESC'
     );
     res.json(result.rows);
   } catch (err) {
@@ -203,7 +214,28 @@ app.get('/api/admin/players', async (req, res) => {
   }
 });
 
-// GET /api/admin/photo/:code — get player photo
+// GET /api/admin/reg-photo/:code — get player registration photo
+app.get('/api/admin/reg-photo/:code', async (req, res) => {
+  const pw = req.headers['x-admin-password'] || req.query.p;
+  if (pw !== ADMIN_PASSWORD) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+  try {
+    const code = req.params.code;
+    const result = await pool.query('SELECT reg_photo, reg_photo_mime FROM players WHERE code = $1', [code]);
+    if (result.rows.length === 0 || !result.rows[0].reg_photo) {
+      return res.status(404).send('Not found');
+    }
+    const { reg_photo, reg_photo_mime } = result.rows[0];
+    res.set('Content-Type', reg_photo_mime);
+    res.send(reg_photo);
+  } catch (err) {
+    console.error('admin reg photo error:', err);
+    res.status(500).send('Server error');
+  }
+});
+
+// GET /api/admin/photo/:code — get player level 5 photo
 app.get('/api/admin/photo/:code', async (req, res) => {
   const pw = req.headers['x-admin-password'] || req.query.p;
   if (pw !== ADMIN_PASSWORD) {

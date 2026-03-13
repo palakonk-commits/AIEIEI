@@ -17,12 +17,22 @@ export async function apiLogin(code) {
 }
 
 /** Accept terms */
-export async function apiAcceptTerms(code) {
-  return fetch(`${BASE}/api/accept-terms`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ code }),
-  }).then(json);
+export async function apiAcceptTerms(code, photoFile = null) {
+  if (photoFile) {
+    const formData = new FormData();
+    formData.append('code', code);
+    formData.append('photo', photoFile);
+    return fetch(`${BASE}/api/accept-terms`, {
+      method: 'POST',
+      body: formData,
+    }).then(json);
+  } else {
+    return fetch(`${BASE}/api/accept-terms`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code }),
+    }).then(json);
+  }
 }
 
 /** Get player progress */

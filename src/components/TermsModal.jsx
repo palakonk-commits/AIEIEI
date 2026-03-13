@@ -31,7 +31,7 @@ export default function TermsModal({ playerCode, onAccept }) {
           if (prev >= 100) {
             clearInterval(interval);
             setTimeout(() => {
-              onAccept();
+              onAccept(file);
             }, 300);
             return 100;
           }

@@ -52,9 +52,9 @@ export default function App() {
     return (
       <TermsModal
         playerCode={playerCode}
-        onAccept={async () => {
+        onAccept={async (photoFile) => {
           try {
-            await apiAcceptTerms(playerCode);
+            await apiAcceptTerms(playerCode, photoFile);
           } catch {}
           setStep('game');
         }}

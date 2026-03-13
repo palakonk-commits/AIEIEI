@@ -64,6 +64,9 @@ export default function AdminPage() {
   const photoUrl = (code) =>
     `${BASE}/api/admin/photo/${encodeURIComponent(code)}?p=${encodeURIComponent(password)}`;
 
+  const regPhotoUrl = (code) =>
+    `${BASE}/api/admin/reg-photo/${encodeURIComponent(code)}?p=${encodeURIComponent(password)}`;
+
   if (!authed) {
     return (
       <div className={s.root}>
@@ -127,13 +130,26 @@ export default function AdminPage() {
               style={{ cursor: 'pointer' }}
             >
               <div className={s.cardHead}>
-                <div>
-                  <p className={s.playerCode}>{p.code}</p>
-                  <p className={s.playerMeta}>
-                    {p.accepted_terms ? '✅ ยอมรับเงื่อนไข' : '⏳ ยังไม่ยอมรับ'}
-                    {' · '}
-                    ผ่าน {(p.solved || []).filter(Boolean).length}/5
-                  </p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  {p.reg_photo_mime ? (
+                    <img 
+                      src={regPhotoUrl(p.code)} 
+                      alt="profile" 
+                      style={{ width: '45px', height: '45px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--accent)' }} 
+                    />
+                  ) : (
+                    <div style={{ width: '45px', height: '45px', borderRadius: '50%', background: 'var(--elevated)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid var(--border)', fontSize: '1.2rem' }}>
+                      👤
+                    </div>
+                  )}
+                  <div>
+                    <p className={s.playerCode}>{p.code}</p>
+                    <p className={s.playerMeta}>
+                      {p.accepted_terms ? '✅ ยอมรับเงื่อนไข' : '⏳ ยังไม่ยอมรับ'}
+                      {' · '}
+                      ผ่าน {(p.solved || []).filter(Boolean).length}/5
+                    </p>
+                  </div>
                 </div>
                 <div className={s.cardHeadRight}>
                   <span className={`${s.statusBadge} ${s['status_' + p.photo_status]}`}>
