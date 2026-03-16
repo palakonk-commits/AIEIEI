@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Lock, Key, Lightbulb, Sparkles } from 'lucide-react';
 import s from './Levels.module.css';
 
 export default function ChoiceLevel({ level, busy, result, onChoice }) {
@@ -11,14 +12,12 @@ export default function ChoiceLevel({ level, busy, result, onChoice }) {
   const [showRevealImg, setShowRevealImg] = useState(false);
   const pinRef = useRef(null);
 
-  // Level 2: reveal hidden choice after 2 wrong attempts
   useEffect(() => {
     if (level.type === 'choice-hidden-5th' && wrongCount >= 2) {
       setShowHidden(true);
     }
   }, [wrongCount, level.type]);
 
-  // Level 4/5: show image(s) when solved
   useEffect(() => {
     if ((level.type === 'choice-image-reveal') && result === 'ok') {
       setShowRevealImg(true);
@@ -37,7 +36,6 @@ export default function ChoiceLevel({ level, busy, result, onChoice }) {
     }
   };
 
-  // Level 3: PIN input handler
   const handlePinChange = (e) => {
     const val = e.target.value;
     if (val.length <= (level.pinLength || 6)) {
@@ -48,19 +46,17 @@ export default function ChoiceLevel({ level, busy, result, onChoice }) {
     }
   };
 
-  // ── Locked level ──
   if (level.type === 'locked') {
     return (
       <div className={s.section}>
         <div className={s.lockedBox}>
           <span className={s.lockedIcon}><Lock size={20} strokeWidth={1.5} /></span>
-          <p className={s.lockedText}>This sector is currently restricted.</p>
+          <p className={s.lockedText}>พื้นที่นี้ถูกจำกัดสิทธิ์ในปัจจุบัน</p>
         </div>
       </div>
     );
   }
 
-  // ── Image reveal after solving (single or multiple) ──
   if (showRevealImg && (level.revealImage || level.revealImages)) {
     const images = level.revealImages || [level.revealImage];
     return (
@@ -73,7 +69,7 @@ export default function ChoiceLevel({ level, busy, result, onChoice }) {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ type: 'spring', damping: 20, delay: i * 0.15 }}
           >
-            <img src={src} alt={`คำใบ้ ${i + 1}`} className={s.levelImage} />
+            <img src={src} alt={`ข้อมูลภาพที่ ${i + 1}`} className={s.levelImage} />
           </motion.div>
         ))}
       </div>
@@ -82,7 +78,6 @@ export default function ChoiceLevel({ level, busy, result, onChoice }) {
 
   return (
     <div className={s.section}>
-      {/* Code snippet for Level 4 */}
       {level.codeSnippet && (
         <motion.pre
           className={s.codeBlock}
@@ -96,14 +91,16 @@ export default function ChoiceLevel({ level, busy, result, onChoice }) {
 
       <p className={s.question}>{level.question}</p>
 
-      {/* Level 3: PIN input before showing choices */}
       {level.type === 'choice-pin-unlock' && !pinUnlocked && (
         <motion.div
           className={s.pinBox}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <p className={s.pinLabel}>🔐 พิมพ์ PIN {level.pinLength} ตัว เพื่อปลดล็อคตัวเลือก</p>
+          <p className={s.pinLabel}>
+            <Key size={16} strokeWidth={1.5} style={{ display: 'inline', marginRight: '6px' }} />
+            ระบุรหัสประจำตัว {level.pinLength} หลัก เพื่อยืนยันคำสั่ง
+          </p>       
           <input
             ref={pinRef}
             className={s.pinInput}
@@ -114,15 +111,14 @@ export default function ChoiceLevel({ level, busy, result, onChoice }) {
             placeholder={'•'.repeat(level.pinLength)}
             autoFocus
           />
-          <p className={s.pinHint}>({pin.length}/{level.pinLength}) พิมพ์อะไรก็ได้!</p>
+          <p className={s.pinHint}>({pin.length}/{level.pinLength}) ข้อมูลใดก็ได้เพื่ออนุมัติ</p>
         </motion.div>
       )}
 
-      {/* Choices — hidden behind PIN for Level 3 */}
       {(level.type !== 'choice-pin-unlock' || pinUnlocked) && (
         <>
           {busy ? (
-            <div className={s.busy}><span className={s.spinner} /> กำลังตรวจสอบ...</div>
+            <div className={s.busy}><span className={s.spinner} /> กำลังประมวลผลคำสั่ง...</div>
           ) : (
             <div className={s.choices}>
               {level.choices.map((ch, i) => (
@@ -139,7 +135,6 @@ export default function ChoiceLevel({ level, busy, result, onChoice }) {
                 </motion.button>
               ))}
 
-              {/* Level 2: Hidden 5th choice appears after wrong attempts */}
               <AnimatePresence>
                 {showHidden && level.hiddenChoice && (
                   <motion.button
@@ -151,19 +146,20 @@ export default function ChoiceLevel({ level, busy, result, onChoice }) {
                     transition={{ type: 'spring', damping: 15 }}
                     whileTap={{ scale: 0.96 }}
                   >
-                    ✨ {level.hiddenChoice.text}
+                    <Sparkles size={16} strokeWidth={1.5} style={{ display: 'inline', marginRight: '6px' }} />
+                    {level.hiddenChoice.text}
                   </motion.button>
                 )}
               </AnimatePresence>
 
-              {/* Hint for Level 2 */}
               {level.type === 'choice-hidden-5th' && !showHidden && wrongCount > 0 && (
                 <motion.p
                   className={s.hiddenHint}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                 >
-                  💡 ลองอีกที... มีคำตอบซ่อนอยู่
+                  <Lightbulb size={16} strokeWidth={1.5} style={{ display: 'inline', marginRight: '6px', verticalAlign: 'text-bottom' }} />
+                  วิเคราะห์โครงสร้างใหม่... อาจมีตัวแปรแฝงอยู่ในระบบ
                 </motion.p>
               )}
             </div>

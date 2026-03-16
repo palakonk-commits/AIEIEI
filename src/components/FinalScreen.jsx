@@ -25,7 +25,7 @@ export default function FinalScreen({ clues }) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.35 }}
       >
-        Mission Accomplished
+        ภารกิจเสร็จสมบูรณ์
       </motion.h2>
 
       <motion.p
@@ -34,7 +34,7 @@ export default function FinalScreen({ clues }) {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5 }}
       >
-        Through systematic elimination, the target's identity has been confirmed.
+        ยืนยันตัวตนเป้าหมายผ่านการวิเคราะห์ข้อมูลเชิงลึกเรียบร้อยแล้ว
       </motion.p>
 
       <motion.div
@@ -45,7 +45,7 @@ export default function FinalScreen({ clues }) {
       >
         <span className={s.name}>BOSS</span>
         <span className={s.aka}>
-          High-Value Target{' '}
+          บุคคลระดับพรีเมียม{' '}
           <Activity size={14} className={s.inlineIcon} strokeWidth={1.5} />
         </span>
       </motion.div>
@@ -57,7 +57,7 @@ export default function FinalScreen({ clues }) {
         transition={{ delay: 0.9 }}
       >
         <p className={s.cluesTitle}>
-          Decrypted Intel{' '}
+          ข้อมูลที่ได้รับการรับรอง{' '}
           <Fingerprint size={16} strokeWidth={1.5} className={s.inlineIcon} />
         </p>
         {clues.map((c, i) => (

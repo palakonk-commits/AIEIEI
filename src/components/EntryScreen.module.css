@@ -136,28 +136,54 @@
   gap: var(--s-6);
 }
 
-.spinnerWrap {
+.fingerprintScanner {
+  position: relative;
+  width: 80px;
+  height: 80px;
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
 }
 
-.spinnerIcon {
-  width: 32px;
-  height: 32px;
-  color: var(--text-2);
+.fingerprintIconBase {
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  color: var(--border); /* Dim base */
+  opacity: 0.3;
+}
+
+.fingerprintIconActive {
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  color: var(--accent); /* Highlight color */
+}
+
+.scanLine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--accent);
+  box-shadow: 0 0 10px 2px var(--accent-mid);
+  z-index: 10;
 }
 
 .loadingTitle {
-  font-size: 1rem;
-  font-weight: 300;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-family: var(--font);
+  font-size: 1.1rem;
+  font-weight: 400;
+  letter-spacing: 0.05em;
   color: var(--text);
+  margin-top: var(--s-4);
 }
 
 .loadingSub {
-  font-size: 0.85rem;
+  font-family: var(--font);
+  font-size: 0.9rem;
   font-weight: 300;
   color: var(--text-3);
 }

@@ -1,5 +1,7 @@
+/* ── UploadLevel.jsx ── */
 import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Clock, XCircle, Camera, RotateCw, CheckCircle, UploadCloud } from 'lucide-react';
 import { apiUploadPhoto } from '../../api';
 import s from './Levels.module.css';
 import { Toast } from '../SharedModals';
@@ -40,9 +42,9 @@ export default function UploadLevel({ level, playerCode, photoStatus, onRefresh 
       const data = await apiUploadPhoto(playerCode, file);
       setStatus(data.status || 'pending');
       if (onRefresh) onRefresh();
-      showToast('อัปโหลดสำเร็จ!', 'success');
+      showToast('อัปโหลดข้อมูลเสร็จสิ้น', 'success');
     } catch {
-      showToast('อัปโหลดไม่สำเร็จ ลองใหม่อีกครั้ง', 'error');
+      showToast('การอัปโหลดล้มเหลว โปรดดำเนินการใหม่อีกครั้ง', 'error');
     } finally {
       setUploading(false);
     }
@@ -53,10 +55,15 @@ export default function UploadLevel({ level, playerCode, photoStatus, onRefresh 
     return (
       <div className={s.section}>
         <div className={s.uploadStatus}>
-          <span className={s.uploadStatusIcon}>⏳</span>
-          <p className={s.uploadStatusText}>อัปโหลดแล้ว — รอรุ่นพี่อนุมัติ</p>
-          <p className={s.uploadStatusHint}>กลับมาเช็คทีหลังนะ!</p>
-          <button className={s.refreshBtn} onClick={onRefresh}>🔄 เช็คสถานะ</button>
+          <span className={s.uploadStatusIcon}>
+             <Clock size={32} strokeWidth={1.5} color="var(--primary)" />
+          </span>
+          <p className={s.uploadStatusText}>อัปโหลดเรียบร้อย — รอการอนุมัติสิทธิ์เข้าถึง</p>
+          <p className={s.uploadStatusHint}>ระบบกำลังประมวลผล กรุณาตรวจสอบสถานะในภายหลัง</p>
+          <button className={s.refreshBtn} onClick={onRefresh}>
+             <RotateCw size={16} strokeWidth={1.5} style={{ marginRight: '6px' }} />
+             ตรวจสอบสถานะ
+          </button>
         </div>
       </div>
     );
@@ -66,10 +73,12 @@ export default function UploadLevel({ level, playerCode, photoStatus, onRefresh 
     return (
       <div className={s.section}>
         <div className={s.uploadStatus}>
-          <span className={s.uploadStatusIcon}>❌</span>
-          <p className={s.uploadStatusText}>รูปถูกปฏิเสธ — ลองถ่ายใหม่แล้วส่งอีกครั้ง</p>
+          <span className={s.uploadStatusIcon}>
+            <XCircle size={32} strokeWidth={1.5} color="var(--red)" />
+          </span>
+          <p className={s.uploadStatusText}>การตรวจสอบล้มเหลว — โปรดดำเนินการอัปโหลดภาพที่ถูกต้องอีกครั้ง</p>
           <button className={s.uploadBtn} onClick={() => { setStatus('none'); setFile(null); setPreview(null); }}>
-            📸 ถ่ายใหม่
+            <Camera size={16} strokeWidth={1.5} style={{ marginRight: '6px' }} /> บันทึกภาพใหม่อีกครั้ง
           </button>
         </div>
       </div>
@@ -79,7 +88,10 @@ export default function UploadLevel({ level, playerCode, photoStatus, onRefresh 
   return (
     <div className={s.section}>
       <p className={s.question}>{level.question}</p>
-      <p className={s.uploadDesc}>📷 ถ่ายรูปคู่กับรุ่นพี่ของคุณแล้วอัปโหลดมาเลย!</p>
+      <p className={s.uploadDesc}>
+        <Camera size={16} strokeWidth={1.5} style={{ display: 'inline', marginRight: '6px' }} />
+        บันทึกภาพหลักฐานการเข้าถึงตามที่ระบุในภารกิจ
+      </p>
       
       <input
         ref={inputRef}
@@ -98,10 +110,18 @@ export default function UploadLevel({ level, playerCode, photoStatus, onRefresh 
           <img src={preview} alt="preview" className={s.previewImg} />
           <div className={s.previewActions}>
             <button className={s.uploadBtnSecondary} onClick={() => inputRef.current?.click()}>
-              🔄 เปลี่ยนรูป
+              <RotateCw size={16} strokeWidth={1.5} style={{ marginRight: '6px' }} /> ปรับเปลี่ยนข้อมูลภาพ
             </button>
             <button className={s.uploadBtn} onClick={handleUpload} disabled={uploading}>
-              {uploading ? '⏳ กำลังอัปโหลด...' : '✅ ส่งรูปนี้'}
+              {uploading ? (
+                <>
+                  <Clock size={16} strokeWidth={1.5} style={{ marginRight: '6px' }} /> กำลังถ่ายโอนข้อมูล...
+                </>
+              ) : (
+                <>
+                  <CheckCircle size={16} strokeWidth={1.5} style={{ marginRight: '6px' }} /> ยืนยันการส่งข้อมูล
+                </>
+              )}
             </button>
           </div>
         </motion.div>
@@ -113,8 +133,10 @@ export default function UploadLevel({ level, playerCode, photoStatus, onRefresh 
           animate={{ opacity: 1, y: 0 }}
           whileTap={{ scale: 0.97 }}
         >
-          <span className={s.uploadAreaIcon}>📸</span>
-          <span className={s.uploadAreaText}>แตะเพื่อถ่ายรูป / เลือกรูปภาพ</span>
+          <span className={s.uploadAreaIcon}>
+            <UploadCloud size={32} strokeWidth={1.5} color="var(--text-3)" />
+          </span>
+          <span className={s.uploadAreaText}>ดำเนินการอัปโหลดภาพหลักฐานการยืนยัน</span>
         </motion.button>
       )}
       

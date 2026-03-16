@@ -1,6 +1,6 @@
 /* ── index.css ── */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;700;800&family=Noto+Sans+Thai:wght@200;300;400;500;700;800&family=JetBrains+Mono:wght@300;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;700;800&family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&family=JetBrains+Mono:wght@300;400&display=swap');
 
 *,
 *::before,
@@ -56,7 +56,7 @@
   --radius-full: 999px;
 
   /* Typography Stack - Adding weights for contrast */
-  --font: 'Inter', 'Noto Sans Thai', sans-serif;
+  --font: 'IBM Plex Sans Thai', 'Inter', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
   /* Elite Motion Curves */

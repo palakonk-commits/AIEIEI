@@ -81,13 +81,13 @@ export default function App() {
     <div className={s.root}>
       <header className={s.header}>
         <motion.p className={s.tag} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-          CLASSIFIED PROTOCOL
+          โปรโตคอลลับขั้นสูง
         </motion.p>
         <motion.h1 className={s.title} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-          Operation: Identity
+          ปฏิบัติการ: ยืนยันตัวตน
         </motion.h1>
         <motion.p className={s.sub} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 }}>
-          Decrypt five challenges to unveil the target.
+          ถอดรหัสปริศนาทั้งห้าเพื่อเปิดเผยข้อมูลเป้าหมาย
         </motion.p>
         <motion.div className={s.counter} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.45 }}>
           <span className={s.playerTag}>
@@ -97,7 +97,7 @@ export default function App() {
           <span className={s.counterNum}>{doneCount}</span>
           <span className={s.counterSlash}>/</span>
           <span className={s.counterTotal}>{playableCount}</span>
-          <span className={s.counterLabel}>Decrypted</span>
+          <span className={s.counterLabel}>ถอดรหัสแล้ว</span>
         </motion.div>
       </header>
 

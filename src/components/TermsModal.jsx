@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
-import { motion } from 'framer-motion';
-import { ShieldAlert, BookOpen, ShieldCheck, Camera, RefreshCw, ArrowRight } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { AlertTriangle, Fingerprint, Camera, ShieldAlert, Cloud } from 'lucide-react';
 import s from './TermsModal.module.css';
 
 export default function TermsModal({ playerCode, onAccept }) {
@@ -36,10 +36,10 @@ export default function TermsModal({ playerCode, onAccept }) {
           className={s.loadingCard}
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.4, ease: [0.2, 0.8, 0.2, 1] }}
         >
           <div className={s.spinner}></div>
-          <p className={s.loadingText}>Processing clearance...</p>
+          <p className={s.loadingText}>กำลังตรวจสอบและเข้ารหัสข้อมูล...</p>
         </motion.div>
       </div>
     );
@@ -49,18 +49,18 @@ export default function TermsModal({ playerCode, onAccept }) {
     <div className={s.root}>
       <motion.div
         className={s.card}
-        initial={{ opacity: 0, y: 30, scale: 0.98 }}
+        initial={{ opacity: 0, y: 40, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.5, ease: [0.2, 0.8, 0.2, 1] }}
       >
-        <motion.div 
-          className={s.icon}
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 0.1, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        <motion.span 
+          className={s.iconWrap}
+          initial={{ scale: 0, rotate: -15 }}
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{ delay: 0.1, duration: 0.5, type: 'spring', bounce: 0.4 }}
         >
-          <ShieldAlert size={28} strokeWidth={1.5} />
-        </motion.div>
+          <AlertTriangle size={32} color="var(--primary)" strokeWidth={1.5} />
+        </motion.span>
 
         <motion.h2 
           className={s.title}
@@ -68,7 +68,7 @@ export default function TermsModal({ playerCode, onAccept }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15, duration: 0.4 }}
         >
-          CLEARANCE REQUIRED
+          ระเบียบปฏิบัติก่อนเริ่มภารกิจ
         </motion.h2>
 
         <motion.p 
@@ -77,38 +77,40 @@ export default function TermsModal({ playerCode, onAccept }) {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.25 }}
         >
-          Operative: <strong className={s.playerCodeAccent}>{playerCode}</strong>
+          ข้อมูลเป้าหมาย: <strong>{playerCode}</strong>
         </motion.p>
 
         <motion.div 
           className={s.rules}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, x: -10 }}
+          animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.35, duration: 0.4 }}
         >
           <p className={s.rulesTitle}>
-            <BookOpen size={16} strokeWidth={2} className={s.inlineIcon} /> Protocol Directives
+            <ShieldAlert size={16} strokeWidth={1.5} style={{ marginRight: '6px' }} />
+            ข้อตกลงและเงื่อนไข
           </p>
           <ul className={s.rulesList}>
-            <li>This sequence is strictly for orientation.</li>
-            <li>Submissions are final. Revision is disabled.</li>
-            <li>Maintain integrity. Do not share solutions.</li>
-            <li>Execute with precision, but remain composed.</li>
-            <li>Contact a senior operative for clearance issues.</li>
+            <li>ภารกิจนี้เป็นส่วนหนึ่งของการทดสอบศักยภาพ P'Code – N'Code</li>
+            <li>ข้อมูลการตัดสินใจจะถูกซิงค์เข้าระบบทันทีและไม่อาจย้อนกลับได้</li>
+            <li>ห้ามเผยแพร่ข้อมูลภารกิจ ถือเป็นความลับขั้นสูงสุด</li>
+            <li>จงตั้งใจวิเคราะห์เบาะแสที่ซ่อนอยู่</li>
+            <li>หากพบความไม่เสถียรของระบบ โปรดแจ้งผู้ดูแลทันที</li>
           </ul>
         </motion.div>
 
         <motion.div 
           className={s.warning}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, x: 10 }}
+          animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.45, duration: 0.4 }}
         >
           <p className={s.warningTitle}>
-            <ShieldCheck size={16} strokeWidth={2} className={s.inlineIcon} /> Secure Protocol
+            <Cloud size={16} strokeWidth={1.5} style={{ marginRight: '6px' }} />
+            ระบบคลาวด์รับรอง
           </p>
           <p className={s.warningText}>
-            Progress logs and visual data are securely encrypted on the central frame. Re-authenticate with your alias to resume at any time.
+            ข้อมูลจะถูกบันทึกไว้ <strong>บนเซิร์ฟเวอร์กลาง</strong> — สามารถเชื่อมต่อโครงข่ายจากอุปกรณ์ใดก็ได้ผ่านรหัสประจำตัว
           </p>
         </motion.div>
 
@@ -119,7 +121,8 @@ export default function TermsModal({ playerCode, onAccept }) {
           transition={{ delay: 0.55, duration: 0.4 }}
         >
           <p className={`${s.warningTitle} ${s.photoTitle}`}>
-            <Camera size={16} strokeWidth={2} className={s.inlineIcon} /> Biometric Submission
+            <Camera size={16} strokeWidth={1.5} style={{ marginRight: '6px' }} />
+            กรุณายืนยันตัวตนด้วยภาพถ่าย
           </p>
           <input
             ref={inputRef}
@@ -136,7 +139,7 @@ export default function TermsModal({ playerCode, onAccept }) {
                 onClick={() => inputRef.current?.click()}
                 className={s.retakeBtn}
               >
-                <RefreshCw size={12} strokeWidth={2} style={{ marginRight: 6 }} /> Recalibrate
+                ปรับเปลี่ยนข้อมูลภาพ
               </button>
             </div>
           ) : (
@@ -144,7 +147,7 @@ export default function TermsModal({ playerCode, onAccept }) {
               onClick={() => inputRef.current?.click()}
               className={s.cameraBtn}
             >
-              Provide Scan
+              เปิดระบบกล้องบันทึกภาพ
             </button>
           )}
         </motion.div>
@@ -162,7 +165,7 @@ export default function TermsModal({ playerCode, onAccept }) {
             className={s.checkbox}
           />
           <span className={s.checkLabel}>
-            Protocol acknowledged.
+            ข้าพเจ้ารับทราบระเบียบปฏิบัติและพร้อมยืนยันตัวตน
           </span>
         </motion.label>
 
@@ -176,7 +179,8 @@ export default function TermsModal({ playerCode, onAccept }) {
           whileHover={checked && file ? { scale: 1.02 } : {}}
           whileTap={checked && file ? { scale: 0.98 } : {}}
         >
-          Proceed <ArrowRight size={16} strokeWidth={2} style={{ marginLeft: 6}} />
+          <Fingerprint size={18} strokeWidth={1.5} style={{ marginRight: '8px', verticalAlign: 'text-bottom' }} /> 
+          อนุมัติการเข้าถึง
         </motion.button>
       </motion.div>
     </div>

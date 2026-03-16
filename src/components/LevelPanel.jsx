@@ -86,8 +86,8 @@ export default function LevelPanel({ level, idx, done, busy, onClose, onCheckCho
                   <LucideIcons.CheckCircle2 className={s.doneIcon} strokeWidth={1.5} />
                 </div>
                 <div>
-                  <p className={s.doneTitle}>Clearance Granted.</p>
-                  <p className={s.clue}>Intel: {level.clue}</p>
+                  <p className={s.doneTitle}>อนุมัติสิทธิ์การเข้าถึง</p>
+                  <p className={s.clue}>ข้อมูลลับ: {level.clue}</p>
                 </div>
               </div>
             </motion.div>
@@ -111,7 +111,7 @@ export default function LevelPanel({ level, idx, done, busy, onClose, onCheckCho
               key={Date.now()}
             >
               <LucideIcons.AlertCircle size={16} strokeWidth={1.5} />
-              <span>Incorrect sequence. Retry.</span>
+              <span>ลำดับข้อมูลไม่ถูกต้อง โปรดประมวลผลใหม่</span>
             </motion.div>
           )}
         </motion.div>
