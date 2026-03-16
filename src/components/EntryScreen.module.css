@@ -88,16 +88,22 @@
 
 /* ── Loading State ── */
 .loadingBox {
+  padding: 3rem 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-  padding: 1rem 0;
+}
+
+.spinnerIcon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  display: inline-block;
 }
 
 .loadingIcon {
-  font-size: 3rem;
-  color: var(--accent);
+  font-size: 4rem;
+  display: inline-block;
 }
 
 .loadingTitle {

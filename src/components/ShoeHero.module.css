@@ -1,0 +1,134 @@
+.hero {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #0c0c0c;
+  color: #ffffff;
+  overflow: hidden;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.container {
+  display: flex;
+  width: 90%;
+  max-width: 1400px;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  z-index: 2;
+}
+
+.textContent {
+  flex: 1;
+  max-width: 600px;
+}
+
+.badge {
+  color: #c9ff00;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+  display: inline-block;
+}
+
+.title {
+  font-size: clamp(3rem, 6vw, 6rem);
+  font-weight: 900;
+  line-height: 1.05;
+  text-transform: uppercase;
+  margin: 0;
+  letter-spacing: -0.03em;
+}
+
+.title span {
+  display: block;
+}
+
+.titleHighlight {
+  color: transparent;
+  -webkit-text-stroke: 2px #c9ff00;
+}
+
+.desc {
+  font-size: 1.15rem;
+  color: #888888;
+  margin: 2rem 0 2.5rem;
+  line-height: 1.6;
+}
+
+.cta {
+  background: #c9ff00;
+  color: #000000;
+  border: none;
+  padding: 1.2rem 3rem;
+  font-size: 1.1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  border-radius: 50px;
+  box-shadow: 0 10px 25px rgba(201, 255, 0, 0.2);
+}
+
+.imageContent {
+  flex: 1.2;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.shoeImg {
+  width: 100%;
+  max-width: 700px;
+  transform: rotate(-15deg);
+  filter: drop-shadow(0 30px 30px rgba(0,0,0,0.8));
+  z-index: 2;
+  mix-blend-mode: normal;
+  border-radius: 20px;
+}
+
+.glowCircle {
+  position: absolute;
+  width: 60vw;
+  height: 60vw;
+  max-width: 600px;
+  max-height: 600px;
+  background: radial-gradient(circle, rgba(201, 255, 0, 0.4) 0%, transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  border-radius: 50%;
+  filter: blur(40px);
+}
+
+@media (max-width: 968px) {
+  .container {
+    flex-direction: column;
+    text-align: center;
+    padding: 100px 0;
+  }
+  
+  .titleHighlight {
+    -webkit-text-stroke: 1px #c9ff00;
+  }
+  
+  .desc {
+    margin: 1.5rem auto;
+  }
+  
+  .imageContent {
+    width: 100%;
+    margin-top: 3rem;
+  }
+  
+  .shoeImg {
+    transform: rotate(-10deg);
+  }
+}

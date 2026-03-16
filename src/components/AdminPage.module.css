@@ -151,46 +151,81 @@
 .cardHeadRight {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  flex-shrink: 0;
+  gap: 0.8rem;
 }
 
-.deleteBtn {
-  width: 30px;
-  height: 30px;
+.clickable {
+  cursor: pointer;
+}
+
+.profileWrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.profileAvatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--accent);
+}
+
+.profilePlaceholder {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: var(--elevated);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--red-soft);
-  border: 1px solid transparent;
-  border-radius: var(--radius-sm);
-  font-size: 0.82rem;
-  cursor: pointer;
-  transition: all var(--transition);
-  opacity: 0.6;
+  border: 2px solid var(--border);
+  font-size: 1.2rem;
 }
 
-.deleteBtn:hover {
-  opacity: 1;
-  border-color: var(--red);
-  background: rgba(252, 165, 165, 0.2);
+.answersTitle {
+  font-weight: bold;
+  margin-bottom: 8px;
 }
 
-.playerCode {
-  font-family: var(--mono);
+.answerRow {
+  margin-bottom: 6px;
   font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--accent);
+  color: #ccc;
 }
 
-.playerMeta {
-  font-size: 0.72rem;
-  color: var(--text-3);
-  margin-top: 0.15rem;
+.answerLabel {
+  color: #888;
+  margin-right: 8px;
+}
+
+.answerLabelDone {
+  color: #4ade80;
+}
+
+.answerText {
+  color: #fff;
+}
+
+.answerMissing {
+  color: #ffb86c;
+  font-style: italic;
+}
+
+.answerNotPassed {
+  color: #666;
+  font-style: italic;
+}
+
+.clickToExpand {
+  font-size: 0.85rem;
+  color: #888;
+  font-style: italic;
 }
 
 .statusBadge {
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   padding: 0.2rem 0.6rem;
   border-radius: var(--radius-full);
   white-space: nowrap;

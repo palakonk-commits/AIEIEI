@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import s from './TermsModal.module.css';
 
@@ -7,7 +7,6 @@ export default function TermsModal({ playerCode, onAccept }) {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [progress, setProgress] = useState(0);
   const inputRef = useRef(null);
 
   const handleFile = (e) => {
@@ -19,28 +18,15 @@ export default function TermsModal({ playerCode, onAccept }) {
     reader.readAsDataURL(f);
   };
 
-  const handleStart = () => {
-    if (!checked || !file) return;
+  const handleStart = async () => {
+    if (!checked || !file || loading) return;
     setLoading(true);
-  };
-
-  useEffect(() => {
-    if (loading) {
-      const interval = setInterval(() => {
-        setProgress((prev) => {
-          if (prev >= 100) {
-            clearInterval(interval);
-            setTimeout(() => {
-              onAccept(file);
-            }, 300);
-            return 100;
-          }
-          return prev + Math.floor(Math.random() * 15) + 5;
-        });
-      }, 150);
-      return () => clearInterval(interval);
+    try {
+      await onAccept(file);
+    } catch (err) {
+      setLoading(false);
     }
-  }, [loading, onAccept]);
+  };
 
   if (loading) {
     return (
@@ -51,11 +37,7 @@ export default function TermsModal({ playerCode, onAccept }) {
           animate={{ opacity: 1, scale: 1 }}
         >
           <div className={s.spinner}></div>
-          <p className={s.loadingText}>กำลังเตรียมความพร้อม...</p>
-          <div className={s.progressBarWrap}>
-            <div className={s.progressBar} style={{ width: `${progress}%` }} />
-          </div>
-          <p className={s.progressText}>{progress}%</p>
+          <p className={s.loadingText}>กำลังบันทึกข้อมูลและเตรียมภารกิจ...</p>
         </motion.div>
       </div>
     );
@@ -96,36 +78,34 @@ export default function TermsModal({ playerCode, onAccept }) {
         </div>
 
         <div className={s.photoRequirement}>
-          <p className={s.warningTitle} style={{color: '#fff', marginBottom: '8px'}}>📸 ถ่ายรูปยืนยันตัวตน</p>
+          <p className={`${s.warningTitle} ${s.photoTitle}`}>📸 ถ่ายรูปยืนยันตัวตน</p>
           <input
             ref={inputRef}
             type="file"
             accept="image/*"
             capture="camera"
             onChange={handleFile}
-            style={{ display: 'none' }}
+            className={s.hiddenInput}
           />
           {preview ? (
-            <div style={{ position: 'relative', width: '100%', maxWidth: '200px', margin: '0 auto 1rem auto' }}>
-              <img src={preview} alt="preview" style={{ width: '100%', borderRadius: '8px', border: '2px solid var(--accent)' }} />
-              <button 
+            <div className={s.previewWrap}>
+              <img src={preview} alt="preview" className={s.previewImage} />
+              <button
                 onClick={() => inputRef.current?.click()}
-                style={{ position: 'absolute', bottom: '10px', right: '10px', background: 'rgba(0,0,0,0.6)', color: 'white', border: 'none', borderRadius: '4px', padding: '4px 8px', cursor: 'pointer', fontSize: '12px' }}
+                className={s.retakeBtn}
               >
                 ถ่ายใหม่
               </button>
             </div>
           ) : (
-            <button 
+            <button
               onClick={() => inputRef.current?.click()}
-              style={{ width: '100%', padding: '0.8rem', background: 'var(--elevated)', border: '1px dashed var(--accent)', borderRadius: '8px', color: 'var(--text)', cursor: 'pointer', marginBottom: '1rem' }}
+              className={s.cameraBtn}
             >
               แตะเพื่อเปิดกล้องถ่ายรูป
             </button>
           )}
-        </div>
-
-        <label className={s.checkRow}>
+        </div>        <label className={s.checkRow}>
           <input
             type="checkbox"
             checked={checked}

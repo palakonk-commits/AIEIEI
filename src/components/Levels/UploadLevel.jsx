@@ -1,14 +1,23 @@
-import { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { apiUploadPhoto } from '../../api';
 import s from './Levels.module.css';
+import { Toast } from '../SharedModals';
 
 export default function UploadLevel({ level, playerCode, photoStatus, onRefresh }) {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [status, setStatus] = useState(photoStatus || 'none');
+  const [toastMsg, setToastMsg] = useState(null);
+  const [toastType, setToastType] = useState('success');
   const inputRef = useRef(null);
+
+  const showToast = (msg, type = 'success') => {
+    setToastMsg(msg);
+    setToastType(type);
+    setTimeout(() => setToastMsg(null), 3000);
+  };
 
   // Sync when parent photoStatus changes (e.g. after refresh)
   useEffect(() => {
@@ -31,8 +40,9 @@ export default function UploadLevel({ level, playerCode, photoStatus, onRefresh 
       const data = await apiUploadPhoto(playerCode, file);
       setStatus(data.status || 'pending');
       if (onRefresh) onRefresh();
+      showToast('อัปโหลดสำเร็จ!', 'success');
     } catch {
-      alert('อัปโหลดไม่สำเร็จ ลองใหม่อีกครั้ง');
+      showToast('อัปโหลดไม่สำเร็จ ลองใหม่อีกครั้ง', 'error');
     } finally {
       setUploading(false);
     }
@@ -107,6 +117,12 @@ export default function UploadLevel({ level, playerCode, photoStatus, onRefresh 
           <span className={s.uploadAreaText}>แตะเพื่อถ่ายรูป / เลือกรูปภาพ</span>
         </motion.button>
       )}
+      
+      <Toast 
+        message={toastMsg} 
+        type={toastType} 
+        onClose={() => setToastMsg(null)} 
+      />
     </div>
   );
 }

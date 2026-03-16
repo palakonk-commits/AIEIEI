@@ -8,12 +8,21 @@ import TermsModal from './components/TermsModal';
 import LevelCard from './components/LevelCard';
 import LevelPanel from './components/LevelPanel';
 import s from './App.module.css';
+import { Toast } from './components/SharedModals';
 
 export default function App() {
   const [step, setStep] = useState('entry'); // 'entry' | 'terms' | 'game'
   const [playerCode, setPlayerCode] = useState('');
   const [loginBusy, setLoginBusy] = useState(false);
   const [loginError, setLoginError] = useState('');
+  const [toastMsg, setToastMsg] = useState(null);
+  const [toastType, setToastType] = useState('success');
+
+  const showToast = (msg, type = 'success') => {
+    setToastMsg(msg);
+    setToastType(type);
+    setTimeout(() => setToastMsg(null), 3000);
+  };
 
   const game = useGame(playerCode);
   const { solved, activeId, busy, doneCount, playableCount, photoStatus, open, close, checkChoice, refreshProgress } = game;
@@ -55,8 +64,12 @@ export default function App() {
         onAccept={async (photoFile) => {
           try {
             await apiAcceptTerms(playerCode, photoFile);
-          } catch {}
-          setStep('game');
+            setStep('game');
+          } catch (error) {
+            console.error(error);
+            showToast('บันทึกข้อมูลไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error');
+            throw error; // Throw to let TermModal know to stop loading
+          }
         }}
       />
     );
@@ -115,6 +128,7 @@ export default function App() {
           />
         )}
       </AnimatePresence>
+      <Toast message={toastMsg} type={toastType} onClose={() => setToastMsg(null)} />
     </div>
   );
 }

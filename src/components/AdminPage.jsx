@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { apiAdminAuth, apiAdminPlayers, apiAdminApprove, apiAdminDelete } from '../api';
+import { Toast, ConfirmModal } from './SharedModals';
 import s from './AdminPage.module.css';
 
 const BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
@@ -13,6 +14,16 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(false);
   const [tab, setTab] = useState('all'); // 'all' | 'pending'
   const [expandedId, setExpandedId] = useState(null); // Keep track of which card is expanded
+  
+  // Custom Modal States
+  const [toastMsg, setToastMsg] = useState('');
+  const [toastType, setToastType] = useState('error');
+  const [confirmData, setConfirmData] = useState({ isOpen: false, code: null });
+
+  const showToast = (msg, type = 'error') => {
+    setToastMsg(msg);
+    setToastType(type);
+  };
 
   const loadPlayers = useCallback(async () => {
     if (!password) return;
@@ -21,7 +32,7 @@ export default function AdminPage() {
       const data = await apiAdminPlayers(password);
       setPlayers(data);
     } catch {
-      alert('โหลดข้อมูลไม่สำเร็จ');
+      showToast('โหลดข้อมูลไม่สำเร็จ');
     } finally {
       setLoading(false);
     }
@@ -45,19 +56,27 @@ export default function AdminPage() {
   const handleApprove = async (code, approved) => {
     try {
       await apiAdminApprove(password, code, approved);
+      showToast(approved ? 'อนุมัติเรียบร้อย' : 'ปฏิเสธเรียบร้อย', 'success');
       loadPlayers();
     } catch {
-      alert('ดำเนินการไม่สำเร็จ');
+      showToast('ดำเนินการไม่สำเร็จ');
     }
   };
 
-  const handleDelete = async (code) => {
-    if (!confirm(`ลบผู้เล่น "${code}" จริงหรือไม่?`)) return;
+  const requestDelete = (code) => {
+    setConfirmData({ isOpen: true, code });
+  };
+
+  const executeDelete = async () => {
+    const code = confirmData.code;
+    setConfirmData({ isOpen: false, code: null });
+    if (!code) return;
     try {
       await apiAdminDelete(password, code);
+      showToast(`ลบผู้เล่น "${code}" สำเร็จ`, 'success');
       loadPlayers();
     } catch {
-      alert('ลบไม่สำเร็จ');
+      showToast('ลบไม่สำเร็จ');
     }
   };
 
@@ -122,23 +141,22 @@ export default function AdminPage() {
           {filtered.map((p) => (
             <motion.div
               key={p.code}
-              className={s.card}
+              className={`${s.card} ${s.clickable}`}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
               onClick={() => setExpandedId(expandedId === p.code ? null : p.code)}
-              style={{ cursor: 'pointer' }}
             >
               <div className={s.cardHead}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div className={s.profileWrap}>
                   {p.reg_photo_mime ? (
-                    <img 
-                      src={regPhotoUrl(p.code)} 
-                      alt="profile" 
-                      style={{ width: '45px', height: '45px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--accent)' }} 
+                    <img
+                      src={regPhotoUrl(p.code)}
+                      alt="profile"
+                      className={s.profileAvatar}
                     />
                   ) : (
-                    <div style={{ width: '45px', height: '45px', borderRadius: '50%', background: 'var(--elevated)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid var(--border)', fontSize: '1.2rem' }}>
+                    <div className={s.profilePlaceholder}>
                       👤
                     </div>
                   )}
@@ -158,7 +176,7 @@ export default function AdminPage() {
                     {p.photo_status === 'approved' && '✅ อนุมัติ'}
                     {p.photo_status === 'rejected' && '❌ ปฏิเสธ'}
                   </span>
-                  <button className={s.deleteBtn} onClick={(e) => { e.stopPropagation(); handleDelete(p.code); }} title="ลบผู้เล่น">
+                  <button className={s.deleteBtn} onClick={(e) => { e.stopPropagation(); requestDelete(p.code); }} title="ลบผู้เล่น">
                     🗑️
                   </button>
                 </div>
@@ -167,27 +185,27 @@ export default function AdminPage() {
               {/* Level progress bar & answers */}
               {expandedId === p.code ? (
                 <div className={s.expandedAnswers} onClick={(e) => e.stopPropagation()}>
-                  <p style={{ fontWeight: 'bold', marginBottom: '8px' }}>รายการคำตอบ:</p>
+                  <p className={s.answersTitle}>รายการคำตอบ:</p>
                   {(p.solved || []).map((done, i) => (
-                    <div key={i} style={{ marginBottom: '6px', fontSize: '0.9rem', color: '#ccc' }}>
-                      <span style={{ color: done ? '#4ade80' : '#888', marginRight: '8px' }}>
+                    <div key={i} className={s.answerRow}>
+                      <span className={`${s.answerLabel} ${done ? s.answerLabelDone : ''}`}>
                         {done ? '✅' : '⏳'} Level {i + 1}:
                       </span>
                       {p.answers && p.answers[i] ? (
-                        <span style={{ color: '#fff' }}>{p.answers[i]}</span>
+                        <span className={s.answerText}>{p.answers[i]}</span>
                       ) : done && i === 4 ? (
-                        <span style={{ color: '#fff' }}>อัปโหลดรูปภาพแล้ว</span>
+                        <span className={s.answerText}>อัปโหลดรูปภาพแล้ว</span>
                       ) : done ? (
-                        <span style={{ color: '#ffb86c', fontStyle: 'italic' }}>ไม่มีข้อมูลคำตอบ</span>
+                        <span className={s.answerMissing}>ไม่มีข้อมูลคำตอบ</span>
                       ) : (
-                        <span style={{ color: '#666', fontStyle: 'italic' }}>ยังไม่ผ่าน</span>
+                        <span className={s.answerNotPassed}>ยังไม่ผ่าน</span>
                       )}
                     </div>
                   ))}
                 </div>
               ) : (
                 <div className={s.progressRow}>
-                  <div style={{ fontSize: '0.85rem', color: '#888', fontStyle: 'italic' }}>ดูรายละเอียดเพิ่มเติม ⬇️</div>
+                  <div className={s.clickToExpand}>ดูรายละเอียดเพิ่มเติม ⬇️</div>
                 </div>
               )}
 
@@ -222,6 +240,20 @@ export default function AdminPage() {
           </p>
         )}
       </div>
+
+      <Toast 
+        message={toastMsg} 
+        type={toastType} 
+        onClose={() => setToastMsg('')} 
+      />
+      
+      <ConfirmModal 
+        isOpen={confirmData.isOpen}
+        title="ยืนยันการลบผู้เล่น"
+        message={`คุณต้องการลบข้อมูลผู้เล่น "${confirmData.code}" ทั้งหมดหรือไม่?`}
+        onConfirm={executeDelete}
+        onCancel={() => setConfirmData({ isOpen: false, code: null })}
+      />
     </div>
   );
 }
