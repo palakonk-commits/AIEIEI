@@ -1,5 +1,6 @@
 ﻿import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { UserCircle } from 'lucide-react';
 import { LEVELS } from './data/levels';
 import { apiLogin, apiAcceptTerms } from './api';
 import useGame from './hooks/useGame';
@@ -80,20 +81,23 @@ export default function App() {
     <div className={s.root}>
       <header className={s.header}>
         <motion.p className={s.tag} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-          AI MISSION
+          CLASSIFIED PROTOCOL
         </motion.p>
         <motion.h1 className={s.title} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-          ค้นหารุ่นพี่ P'Code
+          Operation: Identity
         </motion.h1>
         <motion.p className={s.sub} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 }}>
-          แก้ปริศนา 5 ด่าน เพื่อค้นพบว่ารุ่นพี่ของคุณคือใคร
+          Decrypt five challenges to unveil the target.
         </motion.p>
         <motion.div className={s.counter} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.45 }}>
-          <span className={s.playerTag}>👤 {playerCode}</span>
+          <span className={s.playerTag}>
+            <UserCircle size={14} className={s.userIcon} strokeWidth={1.5} />
+            {playerCode}
+          </span>
           <span className={s.counterNum}>{doneCount}</span>
           <span className={s.counterSlash}>/</span>
           <span className={s.counterTotal}>{playableCount}</span>
-          <span className={s.counterLabel}>สำเร็จแล้ว</span>
+          <span className={s.counterLabel}>Decrypted</span>
         </motion.div>
       </header>
 
@@ -101,7 +105,7 @@ export default function App() {
         {LEVELS.map((lv, i) => (
           <LevelCard
             key={lv.id}
-            emoji={lv.emoji}
+            icon={lv.icon}
             label={lv.label}
             title={lv.title}
             done={solved[i]}

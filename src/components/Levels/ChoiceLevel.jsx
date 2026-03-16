@@ -53,8 +53,8 @@ export default function ChoiceLevel({ level, busy, result, onChoice }) {
     return (
       <div className={s.section}>
         <div className={s.lockedBox}>
-          <span className={s.lockedIcon}>🔒</span>
-          <p className={s.lockedText}>ด่านนี้ยังไม่เปิด — รอติดตามนะ!</p>
+          <span className={s.lockedIcon}><Lock size={20} strokeWidth={1.5} /></span>
+          <p className={s.lockedText}>This sector is currently restricted.</p>
         </div>
       </div>
     );

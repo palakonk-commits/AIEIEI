@@ -1,58 +1,88 @@
 .card {
   display: flex;
   align-items: center;
-  gap: 0.85rem;
+  gap: var(--s-3);
   width: 100%;
-  padding: 1rem 1.1rem;
-  background: var(--card);
+  padding: var(--s-4) var(--s-5);
+  background: var(--elevated);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   cursor: pointer;
   text-align: left;
   color: var(--text);
-  transition: background var(--transition), border-color var(--transition);
+  transition: transform var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+  box-shadow: none; /* Flattened out for elite minimal vibe */
 }
 
 .card:hover {
   background: var(--card-hover);
-  border-color: var(--border-light);
+  border-color: var(--accent-mid);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px -8px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.03);
 }
 
 .card.done {
-  border-color: rgba(110, 231, 183, 0.2);
-  background: rgba(110, 231, 183, 0.04);
+  border-color: var(--green-soft);
+  background: var(--card);
 }
 
-.emoji {
-  font-size: 1.6rem;
-  line-height: 1;
+.card.done:hover {
+  border-color: var(--green);
+  box-shadow: 0 8px 24px -8px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.03);
+}
+
+.iconWrap {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
+  color: var(--text-2);
+  background: var(--elevated);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
 }
 
 .info {
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
+  gap: var(--s-1);
   flex: 1;
   min-width: 0;
 }
 
 .label {
-  font-family: var(--mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.12em;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
   text-transform: uppercase;
   color: var(--text-3);
+  font-weight: 400;
 }
 
 .title {
-  font-size: 0.9rem;
-  font-weight: 500;
+  font-size: 0.95rem;
+  font-weight: 300;
+  color: var(--text);
+  letter-spacing: 0.02em;
 }
 
 .check {
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: var(--green);
-  font-weight: 700;
   flex-shrink: 0;
+  background: var(--green-soft);
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(110, 231, 183, 0.2);
 }

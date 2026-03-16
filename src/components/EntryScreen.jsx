@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { Loader2, Fingerprint } from 'lucide-react';
 import s from './EntryScreen.module.css';
 
 export default function EntryScreen({ onSubmit, busy, error: parentError }) {
@@ -28,56 +29,59 @@ export default function EntryScreen({ onSubmit, busy, error: parentError }) {
       <div className={s.root}>
         <motion.div
           className={s.card}
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, filter: 'blur(10px)' }}
+          animate={{ opacity: 1, filter: 'blur(0px)' }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
           <div className={s.loadingBox}>
             <motion.div
               animate={{ rotate: 360 }}
-              transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
-              className={s.spinnerIcon}
+              transition={{ repeat: Infinity, duration: 1.2, ease: "linear" }}
+              className={s.spinnerWrap}
             >
-              ⚙️
+              <Loader2 className={s.spinnerIcon} strokeWidth={1.5} />
             </motion.div>
-            <h2 className={s.loadingTitle}>กำลังเชื่อมต่อเข้าสู่ระบบ...</h2>
-            <p className={s.loadingSub}>โปรดรอสักครู่ ระบบกำลังสื่อสารกับเซิร์ฟเวอร์</p>
+            <h2 className={s.loadingTitle}>Authenticating.</h2>
+            <p className={s.loadingSub}>Establishing secure connection.</p>
           </div>
         </motion.div>
       </div>
     );
-  }  return (
+  }
+
+  return (
     <div className={s.root}>
       <motion.div
-        className={s.card}
-        initial={{ opacity: 0, y: 30, scale: 0.95 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+        className={s.content}
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       >
-        <motion.span
-          className={s.icon}
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ delay: 0.15, type: 'spring', stiffness: 300 }}
+        <motion.div
+          className={s.iconWrap}
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.2, duration: 1, ease: [0.16, 1, 0.3, 1] }}
         >
-          🕵️
-        </motion.span>
+          <Fingerprint className={s.icon} strokeWidth={1} />
+        </motion.div>
 
         <motion.h1
           className={s.title}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
+          transition={{ delay: 0.3, duration: 0.8 }}
         >
-          AI MISSION
+          Identify.
         </motion.h1>
 
         <motion.p
           className={s.sub}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
+          transition={{ delay: 0.4, duration: 0.8 }}
         >
-          ค้นหารุ่นพี่ P'Code — ใส่รหัสของคุณเพื่อเริ่มภารกิจ
+          Enter your student ID or alias to begin.
         </motion.p>
 
         <motion.form
@@ -85,28 +89,39 @@ export default function EntryScreen({ onSubmit, busy, error: parentError }) {
           onSubmit={handleSubmit}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
+          transition={{ delay: 0.5, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
-          <input
-            className={s.input}
-            type="text"
-            placeholder="รหัสนักศึกษา หรือ ชื่อเล่น"
-            value={code}
-            onChange={(e) => { setCode(e.target.value); setError(''); }}
-            autoFocus
-          />
+          <div className={s.inputWrap}>
+            <input
+              className={s.input}
+              type="text"
+              placeholder="Credentials"
+              value={code}
+              onChange={(e) => { setCode(e.target.value); setError(''); }}
+              autoFocus
+            />
+            <span className={s.inputLine}></span>
+          </div>
           {displayError && (
             <motion.p
               className={s.error}
-              initial={{ opacity: 0, x: -5 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: -5 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
             >
               {displayError}
             </motion.p>
           )}
-          <button className={s.btn} type="submit" disabled={busy}>
-            {busy ? 'กำลังเชื่อมต่อ...' : 'เข้าสู่ภารกิจ →'}
-          </button>
+          <motion.button 
+            className={s.btn} 
+            type="submit" 
+            disabled={busy}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            transition={{ duration: 0.2 }}
+          >
+            {busy ? 'Processing...' : 'Proceed'}
+          </motion.button>
         </motion.form>
       </motion.div>
     </div>

@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Lock, Settings, RefreshCw, User, CheckCircle2, Clock, XCircle, Trash2, ChevronDown } from 'lucide-react';
 import { apiAdminAuth, apiAdminPlayers, apiAdminApprove, apiAdminDelete } from '../api';
 import { Toast, ConfirmModal } from './SharedModals';
 import s from './AdminPage.module.css';
@@ -95,18 +96,18 @@ export default function AdminPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <span className={s.authIcon}>🔐</span>
-          <h1 className={s.authTitle}>Admin Panel</h1>
+          <span className={s.authIcon}><Lock size={32} strokeWidth={1.5} /></span>
+          <h1 className={s.authTitle}>System Administration</h1>
           <input
             className={s.authInput}
             type="password"
-            placeholder="รหัสผ่าน Admin"
+            placeholder="Passcode required"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             autoFocus
           />
           {authError && <p className={s.authError}>{authError}</p>}
-          <button className={s.authBtn} type="submit">เข้าสู่ระบบ</button>
+          <button className={s.authBtn} type="submit">Authenticate</button>
         </motion.form>
       </div>
     );
@@ -121,17 +122,21 @@ export default function AdminPage() {
   return (
     <div className={s.root}>
       <header className={s.header}>
-        <h1 className={s.title}>🛠 Admin Panel</h1>
-        <p className={s.sub}>{players.length} ผู้เล่นทั้งหมด · {pendingCount} รอตรวจ</p>
+        <h1 className={s.title}>
+          <Settings size={28} strokeWidth={1.5} className={s.titleIcon} /> 
+          Overview
+        </h1>
+        <p className={s.sub}>{players.length} Total Ops · {pendingCount} Pending</p>
         <div className={s.tabs}>
           <button className={`${s.tab} ${tab === 'all' ? s.tabActive : ''}`} onClick={() => setTab('all')}>
-            ทั้งหมด ({players.length})
+            All ({players.length})
           </button>
           <button className={`${s.tab} ${tab === 'pending' ? s.tabActive : ''}`} onClick={() => setTab('pending')}>
-            รอตรวจ ({pendingCount})
+            Pending ({pendingCount})
           </button>
           <button className={s.refreshBtn} onClick={loadPlayers} disabled={loading}>
-            🔄 {loading ? 'กำลังโหลด...' : 'รีเฟรช'}
+            <RefreshCw size={16} strokeWidth={1.5} className={loading ? s.spin : ''} />
+            {loading ? 'Syncing...' : 'Sync'}
           </button>
         </div>
       </header>
@@ -157,27 +162,31 @@ export default function AdminPage() {
                     />
                   ) : (
                     <div className={s.profilePlaceholder}>
-                      👤
+                      <User size={20} strokeWidth={1.5} />
                     </div>
                   )}
                   <div>
                     <p className={s.playerCode}>{p.code}</p>
                     <p className={s.playerMeta}>
-                      {p.accepted_terms ? '✅ ยอมรับเงื่อนไข' : '⏳ ยังไม่ยอมรับ'}
+                      {p.accepted_terms ? (
+                        <span className={s.metaIconOk}><CheckCircle2 size={12} strokeWidth={1.5} /> Ack.</span>
+                      ) : (
+                        <span className={s.metaIconPending}><Clock size={12} strokeWidth={1.5} /> Pending</span>
+                      )}
                       {' · '}
-                      ผ่าน {(p.solved || []).filter(Boolean).length}/5
+                      Sector {(p.solved || []).filter(Boolean).length}/5
                     </p>
                   </div>
                 </div>
                 <div className={s.cardHeadRight}>
                   <span className={`${s.statusBadge} ${s['status_' + p.photo_status]}`}>
                     {p.photo_status === 'none' && '—'}
-                    {p.photo_status === 'pending' && '⏳ รอตรวจ'}
-                    {p.photo_status === 'approved' && '✅ อนุมัติ'}
-                    {p.photo_status === 'rejected' && '❌ ปฏิเสธ'}
+                    {p.photo_status === 'pending' && <><Clock size={14} strokeWidth={1.5} /> Awaiting</>}
+                    {p.photo_status === 'approved' && <><CheckCircle2 size={14} strokeWidth={1.5} /> Cleared</>}
+                    {p.photo_status === 'rejected' && <><XCircle size={14} strokeWidth={1.5} /> Denied</>}
                   </span>
-                  <button className={s.deleteBtn} onClick={(e) => { e.stopPropagation(); requestDelete(p.code); }} title="ลบผู้เล่น">
-                    🗑️
+                  <button className={s.deleteBtn} onClick={(e) => { e.stopPropagation(); requestDelete(p.code); }} title="Purge Record">
+                    <Trash2 size={16} strokeWidth={1.5} />
                   </button>
                 </div>
               </div>
@@ -185,27 +194,27 @@ export default function AdminPage() {
               {/* Level progress bar & answers */}
               {expandedId === p.code ? (
                 <div className={s.expandedAnswers} onClick={(e) => e.stopPropagation()}>
-                  <p className={s.answersTitle}>รายการคำตอบ:</p>
+                  <p className={s.answersTitle}>Log Trace:</p>
                   {(p.solved || []).map((done, i) => (
                     <div key={i} className={s.answerRow}>
                       <span className={`${s.answerLabel} ${done ? s.answerLabelDone : ''}`}>
-                        {done ? '✅' : '⏳'} Level {i + 1}:
+                        {done ? <CheckCircle2 size={14} strokeWidth={1.5} /> : <Clock size={14} strokeWidth={1.5} />} L{i + 1}:
                       </span>
                       {p.answers && p.answers[i] ? (
                         <span className={s.answerText}>{p.answers[i]}</span>
                       ) : done && i === 4 ? (
-                        <span className={s.answerText}>อัปโหลดรูปภาพแล้ว</span>
+                        <span className={s.answerText}>Visual Logged.</span>
                       ) : done ? (
-                        <span className={s.answerMissing}>ไม่มีข้อมูลคำตอบ</span>
+                        <span className={s.answerMissing}>N/A</span>
                       ) : (
-                        <span className={s.answerNotPassed}>ยังไม่ผ่าน</span>
+                        <span className={s.answerNotPassed}>Incomplete</span>
                       )}
                     </div>
                   ))}
                 </div>
               ) : (
                 <div className={s.progressRow}>
-                  <div className={s.clickToExpand}>ดูรายละเอียดเพิ่มเติม ⬇️</div>
+                  <div className={s.clickToExpand}>Expand Details <ChevronDown size={14} strokeWidth={1.5} /></div>
                 </div>
               )}
 
@@ -221,10 +230,10 @@ export default function AdminPage() {
                   {p.photo_status === 'pending' && (
                     <div className={s.photoActions}>
                       <button className={s.approveBtn} onClick={(e) => { e.stopPropagation(); handleApprove(p.code, true); }}>
-                        ✅ อนุมัติ
+                        <CheckCircle2 size={14} strokeWidth={1.5} /> Approve
                       </button>
                       <button className={s.rejectBtn} onClick={(e) => { e.stopPropagation(); handleApprove(p.code, false); }}>
-                        ❌ ปฏิเสธ
+                        <XCircle size={14} strokeWidth={1.5} /> Reject
                       </button>
                     </div>
                   )}
@@ -236,21 +245,21 @@ export default function AdminPage() {
 
         {filtered.length === 0 && (
           <p className={s.empty}>
-            {tab === 'pending' ? 'ไม่มีรูปที่รอตรวจ' : 'ยังไม่มีผู้เล่น'}
+            {tab === 'pending' ? 'No pending visual logs.' : 'Database empty.'}
           </p>
         )}
       </div>
 
-      <Toast 
-        message={toastMsg} 
-        type={toastType} 
-        onClose={() => setToastMsg('')} 
+      <Toast
+        message={toastMsg}
+        type={toastType}
+        onClose={() => setToastMsg('')}
       />
-      
-      <ConfirmModal 
+
+      <ConfirmModal
         isOpen={confirmData.isOpen}
-        title="ยืนยันการลบผู้เล่น"
-        message={`คุณต้องการลบข้อมูลผู้เล่น "${confirmData.code}" ทั้งหมดหรือไม่?`}
+        title="Confirm Purge"
+        message={`Authorize termination of operative "${confirmData.code}" records?`}
         onConfirm={executeDelete}
         onCancel={() => setConfirmData({ isOpen: false, code: null })}
       />

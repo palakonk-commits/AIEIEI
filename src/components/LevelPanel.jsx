@@ -1,18 +1,19 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import * as LucideIcons from 'lucide-react';
 import LevelContent from './LevelContent';
 import s from './LevelPanel.module.css';
 
 const overlay = {
   initial: { opacity: 0 },
-  animate: { opacity: 1 },
-  exit: { opacity: 0 },
+  animate: { opacity: 1, transition: { duration: 0.3, ease: [0.2, 0.8, 0.2, 1] } },
+  exit: { opacity: 0, transition: { duration: 0.2 } },
 };
 
 const panel = {
-  initial: { opacity: 0, y: 40, scale: 0.97 },
-  animate: { opacity: 1, y: 0, scale: 1, transition: { type: 'spring', damping: 28, stiffness: 300 } },
-  exit: { opacity: 0, y: 30, scale: 0.97, transition: { duration: 0.2 } },
+  initial: { opacity: 0, y: 40, scale: 0.98 },
+  animate: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } },
+  exit: { opacity: 0, y: 30, scale: 0.98, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] } },
 };
 
 export default function LevelPanel({ level, idx, done, busy, onClose, onCheckChoice, playerCode, photoStatus, onRefresh }) {
@@ -24,15 +25,21 @@ export default function LevelPanel({ level, idx, done, busy, onClose, onCheckCho
   };
 
   const isLocked = level.type === 'locked';
+  const IconComponent = level.icon && LucideIcons[level.icon] ? LucideIcons[level.icon] : LucideIcons.FileCode2;
 
   return (
     <>
       <motion.div className={s.overlay} {...overlay} onClick={onClose} />
       <div className={s.wrapper}>
         <motion.div className={s.panel} {...panel}>
-          <button className={s.close} onClick={onClose} aria-label="ปิด">✕</button>
+          <button className={s.close} onClick={onClose} aria-label="Close">
+            <LucideIcons.X size={20} strokeWidth={1.5} />
+          </button>
+          
           <div className={s.head}>
-            <span className={s.emoji}>{level.emoji}</span>
+            <div className={s.iconWrap}>
+              <IconComponent className={s.iconHead} strokeWidth={1.2} />
+            </div>
             <div>
               <p className={s.label}>{level.label}</p>
               <h2 className={s.title}>{level.title}</h2>
@@ -43,8 +50,9 @@ export default function LevelPanel({ level, idx, done, busy, onClose, onCheckCho
 
           {done ? (
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, filter: 'blur(4px)' }}
+              animate={{ opacity: 1, filter: 'blur(0px)' }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             >
               {/* Single reveal image */}
               {level.revealImage && !level.revealImages && (
@@ -74,10 +82,12 @@ export default function LevelPanel({ level, idx, done, busy, onClose, onCheckCho
                 </div>
               )}
               <div className={s.doneBox}>
-                <span className={s.doneIcon}>✓</span>
+                <div className={s.doneIconWrap}>
+                  <LucideIcons.CheckCircle2 className={s.doneIcon} strokeWidth={1.5} />
+                </div>
                 <div>
-                  <p className={s.doneTitle}>ผ่านแล้ว!</p>
-                  <p className={s.clue}>คำใบ้: {level.clue}</p>
+                  <p className={s.doneTitle}>Clearance Granted.</p>
+                  <p className={s.clue}>Intel: {level.clue}</p>
                 </div>
               </div>
             </motion.div>
@@ -94,14 +104,15 @@ export default function LevelPanel({ level, idx, done, busy, onClose, onCheckCho
           )}
 
           {result === 'wrong' && !done && !isLocked && level.type !== 'choice-all-correct' && (
-            <motion.p
+            <motion.div
               className={s.wrong}
-              initial={{ opacity: 0, x: -5 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: -5 }}
+              animate={{ opacity: 1, y: 0 }}
               key={Date.now()}
             >
-              ❌ ไม่ถูกต้อง — ลองอีกครั้ง
-            </motion.p>
+              <LucideIcons.AlertCircle size={16} strokeWidth={1.5} />
+              <span>Incorrect sequence. Retry.</span>
+            </motion.div>
           )}
         </motion.div>
       </div>

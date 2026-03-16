@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
+import { ShieldAlert, BookOpen, ShieldCheck, Camera, RefreshCw, ArrowRight } from 'lucide-react';
 import s from './TermsModal.module.css';
 
 export default function TermsModal({ playerCode, onAccept }) {
@@ -33,11 +34,12 @@ export default function TermsModal({ playerCode, onAccept }) {
       <div className={s.root}>
         <motion.div
           className={s.loadingCard}
-          initial={{ opacity: 0, scale: 0.9 }}
+          initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
         >
           <div className={s.spinner}></div>
-          <p className={s.loadingText}>กำลังบันทึกข้อมูลและเตรียมภารกิจ...</p>
+          <p className={s.loadingText}>Processing clearance...</p>
         </motion.div>
       </div>
     );
@@ -47,38 +49,78 @@ export default function TermsModal({ playerCode, onAccept }) {
     <div className={s.root}>
       <motion.div
         className={s.card}
-        initial={{ opacity: 0, y: 30, scale: 0.95 }}
+        initial={{ opacity: 0, y: 30, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       >
-        <span className={s.icon}>⚠️</span>
+        <motion.div 
+          className={s.icon}
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.1, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <ShieldAlert size={28} strokeWidth={1.5} />
+        </motion.div>
 
-        <h2 className={s.title}>คำเตือนก่อนเริ่มภารกิจ</h2>
+        <motion.h2 
+          className={s.title}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15, duration: 0.4 }}
+        >
+          CLEARANCE REQUIRED
+        </motion.h2>
 
-        <p className={s.hello}>
-          สวัสดี <strong>{playerCode}</strong> 👋
-        </p>
+        <motion.p 
+          className={s.hello}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.25 }}
+        >
+          Operative: <strong className={s.playerCodeAccent}>{playerCode}</strong>
+        </motion.p>
 
-        <div className={s.rules}>
-          <p className={s.rulesTitle}>📋 กฎกติกา — อ่านให้จบก่อนนะ!</p>
-          <ul className={s.rulesList}>
-            <li>เกมนี้เป็นส่วนหนึ่งของกิจกรรมรับน้อง P'Code – N'Code</li>
-            <li>ทุกคำตอบจะถูกบันทึกไว้ ไม่สามารถแก้ไขได้</li>
-            <li>ห้ามแชร์คำตอบให้เพื่อน — เล่นด้วยตัวเองนะ!</li>
-            <li>สนุกกับมัน อย่าเครียด 😄</li>
-            <li>ถ้ามีปัญหาให้ติดต่อรุ่นพี่ได้เลย</li>
-          </ul>
-        </div>
-
-        <div className={s.warning}>
-          <p className={s.warningTitle}>📡 ข้อมูลสำคัญ</p>
-          <p className={s.warningText}>
-            ข้อมูลของคุณถูกเก็บไว้ <strong>บนเซิร์ฟเวอร์</strong> — เล่นจากเครื่องไหนก็ได้แค่ใส่รหัสเดิมที่เคยใช้ ข้อมูลจะกลับมาเหมือนเดิม!
+        <motion.div 
+          className={s.rules}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35, duration: 0.4 }}
+        >
+          <p className={s.rulesTitle}>
+            <BookOpen size={16} strokeWidth={2} className={s.inlineIcon} /> Protocol Directives
           </p>
-        </div>
+          <ul className={s.rulesList}>
+            <li>This sequence is strictly for orientation.</li>
+            <li>Submissions are final. Revision is disabled.</li>
+            <li>Maintain integrity. Do not share solutions.</li>
+            <li>Execute with precision, but remain composed.</li>
+            <li>Contact a senior operative for clearance issues.</li>
+          </ul>
+        </motion.div>
 
-        <div className={s.photoRequirement}>
-          <p className={`${s.warningTitle} ${s.photoTitle}`}>📸 ถ่ายรูปยืนยันตัวตน</p>
+        <motion.div 
+          className={s.warning}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.45, duration: 0.4 }}
+        >
+          <p className={s.warningTitle}>
+            <ShieldCheck size={16} strokeWidth={2} className={s.inlineIcon} /> Secure Protocol
+          </p>
+          <p className={s.warningText}>
+            Progress logs and visual data are securely encrypted on the central frame. Re-authenticate with your alias to resume at any time.
+          </p>
+        </motion.div>
+
+        <motion.div 
+          className={s.photoRequirement}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.55, duration: 0.4 }}
+        >
+          <p className={`${s.warningTitle} ${s.photoTitle}`}>
+            <Camera size={16} strokeWidth={2} className={s.inlineIcon} /> Biometric Submission
+          </p>
           <input
             ref={inputRef}
             type="file"
@@ -94,7 +136,7 @@ export default function TermsModal({ playerCode, onAccept }) {
                 onClick={() => inputRef.current?.click()}
                 className={s.retakeBtn}
               >
-                ถ่ายใหม่
+                <RefreshCw size={12} strokeWidth={2} style={{ marginRight: 6 }} /> Recalibrate
               </button>
             </div>
           ) : (
@@ -102,10 +144,17 @@ export default function TermsModal({ playerCode, onAccept }) {
               onClick={() => inputRef.current?.click()}
               className={s.cameraBtn}
             >
-              แตะเพื่อเปิดกล้องถ่ายรูป
+              Provide Scan
             </button>
           )}
-        </div>        <label className={s.checkRow}>
+        </motion.div>
+
+        <motion.label 
+          className={s.checkRow}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.65 }}
+        >
           <input
             type="checkbox"
             checked={checked}
@@ -113,17 +162,22 @@ export default function TermsModal({ playerCode, onAccept }) {
             className={s.checkbox}
           />
           <span className={s.checkLabel}>
-            ฉันได้อ่านและยอมรับเงื่อนไขแล้ว
+            Protocol acknowledged.
           </span>
-        </label>
+        </motion.label>
 
-        <button
+        <motion.button
           className={`${s.btn} ${(!checked || !file) ? s.btnDisabled : ''}`}
           disabled={!checked || !file}
           onClick={handleStart}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.75, duration: 0.4 }}
+          whileHover={checked && file ? { scale: 1.02 } : {}}
+          whileTap={checked && file ? { scale: 0.98 } : {}}
         >
-          เริ่มภารกิจ 🚀
-        </button>
+          Proceed <ArrowRight size={16} strokeWidth={2} style={{ marginLeft: 6}} />
+        </motion.button>
       </motion.div>
     </div>
   );

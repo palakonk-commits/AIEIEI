@@ -3,37 +3,39 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0 1.2rem 4rem;
+  padding: 0 var(--s-6) var(--s-16);
 }
 
 /* ── Header ── */
 .header {
   text-align: center;
-  padding: 3.5rem 0 2.5rem;
+  padding: var(--s-16) 0 var(--s-12);
   width: 100%;
   max-width: 540px;
 }
 
 .tag {
-  font-family: var(--mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.18em;
-  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.25em;
+  color: var(--text-3);
   text-transform: uppercase;
-  margin-bottom: 0.6rem;
+  margin-bottom: var(--s-4);
 }
 
 .title {
-  font-size: clamp(1.5rem, 4.5vw, 2.1rem);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.25;
+  font-size: clamp(2rem, 5vw, 2.75rem);
+  font-weight: 200; /* Ultra thin font for elite fashion look */
+  letter-spacing: -0.04em;
+  line-height: 1.1;
   color: var(--text);
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--s-3);
 }
 
 .sub {
-  font-size: 0.88rem;
+  font-size: 0.95rem;
+  font-weight: 300;
   color: var(--text-2);
   line-height: 1.6;
 }
@@ -41,27 +43,39 @@
 .counter {
   display: inline-flex;
   align-items: center;
-  gap: 0.15rem;
-  margin-top: 1.2rem;
-  padding: 0.35rem 1rem;
+  gap: var(--s-1);
+  margin-top: var(--s-8);
+  padding: var(--s-2) var(--s-5);
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius-full);
+  box-shadow: none; /* Removed heavy shadow, keep it flat and minimal */
+  backdrop-filter: blur(12px);
 }
 
 .playerTag {
-  font-size: 0.72rem;
-  color: var(--accent);
-  margin-right: 0.6rem;
-  padding-right: 0.6rem;
-  border-right: 1px solid var(--border);
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--text-2);
+  margin-right: var(--s-4);
+  padding-right: var(--s-4);
+  border-right: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.userIcon {
+  opacity: 0.7;
 }
 
 .counterNum {
-  font-family: var(--mono);
+  font-family: var(--font-mono);
   font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--accent);
+  font-weight: 400;
+  color: var(--text);
 }
 
 .counterSlash {
@@ -72,16 +86,19 @@
 }
 
 .counterTotal {
-  font-family: var(--mono);
+  font-family: var(--font-mono);
   font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--text);
+  font-weight: 300;
+  color: var(--text-3);
 }
 
 .counterLabel {
-  font-size: 0.72rem;
+  font-size: 0.65rem;
   color: var(--text-3);
-  margin-left: 0.5rem;
+  margin-left: var(--s-3);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-weight: 400;
 }
 
 /* ── Grid ── */
@@ -90,7 +107,7 @@
   max-width: 540px;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 0.75rem;
+  gap: var(--s-4);
 }
 
 @media (max-width: 540px) {

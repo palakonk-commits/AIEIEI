@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { Target, Trophy, Fingerprint, Activity } from 'lucide-react';
 import s from './FinalScreen.module.css';
 
 export default function FinalScreen({ clues }) {
@@ -12,10 +13,10 @@ export default function FinalScreen({ clues }) {
       <motion.div
         className={s.badge}
         initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ delay: 0.2, type: 'spring', stiffness: 300 }}
+        animate={{ scale: 1, rotate: [0, -10, 10, -10, 0] }}
+        transition={{ delay: 0.2, type: 'spring', stiffness: 300, duration: 1 }}
       >
-        🎉
+        <Trophy size={48} strokeWidth={1.5} color="var(--primary)" />
       </motion.div>
 
       <motion.h2
@@ -24,7 +25,7 @@ export default function FinalScreen({ clues }) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.35 }}
       >
-        ภารกิจสำเร็จ!
+        Mission Accomplished
       </motion.h2>
 
       <motion.p
@@ -33,7 +34,7 @@ export default function FinalScreen({ clues }) {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5 }}
       >
-        คุณค้นพบแล้วว่ารุ่นพี่ P'Code คือ...
+        Through systematic elimination, the target's identity has been confirmed.
       </motion.p>
 
       <motion.div
@@ -43,7 +44,10 @@ export default function FinalScreen({ clues }) {
         transition={{ delay: 0.65, type: 'spring', stiffness: 200 }}
       >
         <span className={s.name}>BOSS</span>
-        <span className={s.aka}>บอส</span>
+        <span className={s.aka}>
+          High-Value Target{' '}
+          <Activity size={14} className={s.inlineIcon} strokeWidth={1.5} />
+        </span>
       </motion.div>
 
       <motion.div
@@ -52,7 +56,10 @@ export default function FinalScreen({ clues }) {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.9 }}
       >
-        <p className={s.cluesTitle}>เบาะแสที่รวบรวมได้</p>
+        <p className={s.cluesTitle}>
+          Decrypted Intel{' '}
+          <Fingerprint size={16} strokeWidth={1.5} className={s.inlineIcon} />
+        </p>
         {clues.map((c, i) => (
           <motion.div
             key={i}

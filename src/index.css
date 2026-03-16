@@ -1,9 +1,6 @@
-/* ═══════════════════════════════════════════
-   index.css — total reset + design tokens
-   Soft dark, generous whitespace, no glow
-═══════════════════════════════════════════ */
+/* ── index.css ── */
 
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;700;800&family=Noto+Sans+Thai:wght@200;300;400;500;700;800&family=JetBrains+Mono:wght@300;400&display=swap');
 
 *,
 *::before,
@@ -14,35 +11,57 @@
 }
 
 :root {
-  --bg: #101014;
-  --card: #18181c;
-  --card-hover: #1e1e24;
-  --elevated: #222228;
-  --border: #2a2a32;
-  --border-light: #33333d;
+  /* Sophisticated Muted Palette */
+  --bg: oklch(0.12 0.005 270); /* Deep charcoal */
+  --card: oklch(0.15 0.005 270);
+  --card-hover: oklch(0.18 0.005 270);
+  --elevated: oklch(0.20 0.005 270);
+  --border: oklch(0.25 0.005 270);
+  --border-light: oklch(0.35 0.005 270);
 
-  --text: #eaeaf0;
-  --text-2: #a0a0b4;
-  --text-3: #64647a;
+  /* Typography Colors */
+  --text: oklch(0.95 0 0); /* Stark white */
+  --text-2: oklch(0.70 0.005 270); /* Muted slate */
+  --text-3: oklch(0.50 0.005 270); /* Deep slate */
 
-  --accent: #a78bfa;
-  --accent-soft: rgba(167, 139, 250, 0.12);
-  --accent-mid: rgba(167, 139, 250, 0.25);
-  --green: #6ee7b7;
-  --green-soft: rgba(110, 231, 183, 0.12);
-  --red: #fca5a5;
-  --red-soft: rgba(252, 165, 165, 0.1);
-  --blue: #93c5fd;
+  /* One Single Pop Color - Sophisticated Cobalt/Electric Blue */
+  --accent: oklch(0.65 0.15 250);
+  --accent-soft: oklch(0.65 0.15 250 / 0.1);
+  --accent-mid: oklch(0.65 0.15 250 / 0.25);
+  
+  /* Status Colors (Muted) */
+  --green: oklch(0.75 0.1 160);
+  --green-soft: oklch(0.75 0.1 160 / 0.1);
+  --red: oklch(0.65 0.15 20);
+  --red-soft: oklch(0.65 0.15 20 / 0.1);
 
-  --radius-sm: 8px;
-  --radius: 12px;
-  --radius-lg: 16px;
+  /* Generous Spacing Grid */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 20px;
+  --s-6: 24px;
+  --s-8: 32px;
+  --s-10: 40px;
+  --s-12: 48px;
+  --s-16: 64px;
+  --s-20: 80px;
+  --s-24: 96px;
+
+  /* Refined Sharp Radii */
+  --radius-sm: 2px;
+  --radius: 4px;
+  --radius-lg: 8px;
   --radius-full: 999px;
 
-  --font: 'Noto Sans Thai', system-ui, sans-serif;
-  --mono: 'JetBrains Mono', monospace;
+  /* Typography Stack - Adding weights for contrast */
+  --font: 'Inter', 'Noto Sans Thai', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
 
-  --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Elite Motion Curves */
+  --transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 html {
@@ -54,29 +73,34 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font);
-  line-height: 1.6;
+  line-height: 1.5; /* Premium baseline */
   min-height: 100dvh;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 6px;
 }
 ::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
   background: var(--border-light);
-  border-radius: 2px;
 }
 
 ::selection {
-  background: var(--accent-soft);
-  color: var(--accent);
+  background: var(--accent-mid);
+  color: oklch(0.98 0.01 270);
 }
 
-button {
-  cursor: pointer;
+button, input {
   font-family: inherit;
+  border: none;
+  background: none;
 }
 
 input {
-  font-family: var(--mono);
+  font-family: var(--font-mono); /* Re-evaluating mono for inputs overall, usually sans is better except for codes */
 }
