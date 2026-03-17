@@ -75,10 +75,10 @@ app.post('/api/login', async (req, res) => {
     let result = await pool.query('SELECT * FROM players WHERE code = $1', [trimmed]);
 
     if (result.rows.length === 0) {
-      // Create new player with empty solved array for 5 levels
+      // Create new player with empty solved array for 8 levels
       result = await pool.query(
         'INSERT INTO players (code, solved) VALUES ($1, $2) RETURNING *',
-        [trimmed, JSON.stringify([false, false, false, false, false])]
+        [trimmed, JSON.stringify(Array(8).fill(false))]
       );
     }
 
@@ -146,15 +146,18 @@ app.post('/api/solve', async (req, res) => {
     }
 
     const solved = result.rows[0].solved;
-    const answers = result.rows[0].answers || [null, null, null, null, null];
-    
-    if (levelIdx >= 0 && levelIdx < solved.length) {
+    const answers = result.rows[0].answers || [];
+
+    if (levelIdx >= 0) {
+      // Ensure arrays are long enough
+      while (solved.length <= levelIdx) solved.push(false);
       solved[levelIdx] = true;
+
       if (answer !== undefined) {
         while (answers.length <= levelIdx) answers.push(null);
         answers[levelIdx] = answer;
       }
-      
+
       await pool.query(
         'UPDATE players SET solved = $1, answers = $2, updated_at = NOW() WHERE code = $3',
         [JSON.stringify(solved), JSON.stringify(answers), code]

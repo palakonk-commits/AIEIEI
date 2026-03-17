@@ -22,7 +22,11 @@ export default function useGame(playerCode) {
     if (!playerCode) return;
     apiProgress(playerCode)
       .then((data) => {
-        if (Array.isArray(data.solved)) setSolved(data.solved);
+        if (Array.isArray(data.solved)) {
+          const newSolved = Array(LEVELS.length).fill(false);
+          data.solved.forEach((val, i) => { if (i < newSolved.length) newSolved[i] = val; });
+          setSolved(newSolved);
+        }
         if (data.photo_status) setPhotoStatus(data.photo_status);
       })
       .catch(() => {}); // silently fail — fresh state
