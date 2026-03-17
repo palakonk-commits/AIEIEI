@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Play, RotateCcw } from 'lucide-react';
 import s from './Levels.module.css';
 
-export default function MazeLevel({ level, busy, result, onChoice }) {
+export default function MazeLevel({ level, busy, result, onChoice, playerCode }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [gameOver, setGameOver] = useState(false);
   const [gameWon, setGameWon] = useState(false);
@@ -11,6 +11,16 @@ export default function MazeLevel({ level, busy, result, onChoice }) {
   const [enemyPos, setEnemyPos] = useState({ x: 50, y: 10 });
   const [timeLeft, setTimeLeft] = useState(15);
   
+  const cacheKey = `aiei_maze_state_${playerCode}`;
+  const [attemptData, setAttemptData] = useState({ tries: 0 });
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(cacheKey);
+      if (saved) setAttemptData(JSON.parse(saved));
+    } catch {}
+  }, [cacheKey]);
+
   const containerRef = useRef(null);
   
   const GAY_IMAGE = 'https://i.pinimg.com/236x/4c/c8/3d/4cc83df6f85e10552d13592838ce6d74.jpg';
@@ -44,7 +54,17 @@ export default function MazeLevel({ level, busy, result, onChoice }) {
   // Enemy movement
   useEffect(() => {
     if (!isPlaying || gameOver || gameWon) return;
-    const speed = 2.5; // Enemy speed
+    
+    // Rigged Logic: 
+    // 1st and 2nd tries: Normal speed, but at <= 3 seconds, super speed to catch player.
+    // 3rd try (and beyond): Very slow, easy win.
+    let speed = 2.5;
+    if (attemptData.tries < 2) {
+      if (timeLeft <= 4) speed = 15; // Bot accelerates crazily at the end
+    } else {
+      speed = 0.5; // Bot is very slow on the 3rd attempt
+    }
+
     const interval = setInterval(() => {
       setEnemyPos(prev => {
         const dx = playerPos.x - prev.x;
@@ -55,6 +75,9 @@ export default function MazeLevel({ level, busy, result, onChoice }) {
         if (dist < 10) {
           setGameOver(true);
           setIsPlaying(false);
+          const newTries = attemptData.tries + 1;
+          setAttemptData({ tries: newTries });
+          localStorage.setItem(cacheKey, JSON.stringify({ tries: newTries }));
           return prev;
         }
         
@@ -65,7 +88,7 @@ export default function MazeLevel({ level, busy, result, onChoice }) {
       });
     }, 50);
     return () => clearInterval(interval);
-  }, [isPlaying, playerPos, gameOver, gameWon]);
+  }, [isPlaying, playerPos, gameOver, gameWon, timeLeft, attemptData.tries, cacheKey]);
 
   const handlePointerMove = (e) => {
     if (!isPlaying || gameOver || gameWon || !containerRef.current) return;
@@ -84,7 +107,8 @@ export default function MazeLevel({ level, busy, result, onChoice }) {
     <div className={s.section}>
       <p className={s.question}>{level.question}</p>
       <p style={{ textAlign: 'center', color: 'var(--text-dim)', marginBottom: '1rem', fontSize: '0.9rem' }}>
-        ลากนิ้ว/เมาส์เพื่อหนีให้รอดใน 15 วินาที
+        ลากนิ้ว/เมาส์เพื่อหนีให้รอดใน 15 วินาที (รอบที่: {attemptData.tries + 1})
+        {attemptData.tries >= 2 && <span style={{ color: 'var(--neon-primary)', display: 'block' }}>ศัตรูเริ่มอ่อนแรง โอกาสนี้เป็นของคุณ!</span>}
       </p>
 
       <div 

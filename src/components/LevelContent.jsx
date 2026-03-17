@@ -24,7 +24,7 @@ export default function LevelContent({ level, busy, result, onChoice, playerCode
   }
 
   if (level.type === 'maze') {
-    return <MazeLevel level={level} busy={busy} result={result} onChoice={onChoice} />;
+    return <MazeLevel level={level} busy={busy} result={result} onChoice={onChoice} playerCode={playerCode} />;
   }
 
   if (level.type === 'boss-clicker') {
