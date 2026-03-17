@@ -1,25 +1,42 @@
 /* Admin Page Styles */
 .root {
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0 1rem 4rem;
+  min-height: 100vh;
+  background: var(--bg-main);
+  color: var(--text-main);
+  font-family: 'IBM Plex Sans Thai', sans-serif;
+  overflow-x: hidden;
 }
 
-/* ── Auth ── */
+/* Adjust root to allow full screen layouts if sidebar is present */
+.mainContent {
+  transition: margin-left 0.3s;
+  max-width: 1200px; /* Wider to accommodate preview */
+  margin: 0 auto;
+  min-height: 100vh;
+  padding: 4rem 1rem 2rem 1rem; /* Top padding for hamburger button */
+}
+
+/* Optional shifting effect if we want main body to move when desktop sidebar is open, though we use modal sidebar */
+.mainShifted {
+  transition: margin-left 0.3s;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 100vh;
+  padding: 4rem 1rem 2rem 1rem;
+}
+
 .authCard {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  padding: 2.5rem 2rem;
-  background: var(--card);
+  background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   margin-top: 20vh;
   width: 100%;
   max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2.5rem 2rem;
 }
 
 .authIcon { font-size: 2.5rem; }
@@ -337,4 +354,50 @@
   color: var(--text-3);
   font-size: 0.85rem;
   padding: 3rem 0;
+}
+
+/* New Image Modal Styles */
+.imageModalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  backdrop-filter: blur(8px);
+}
+
+.imageModalContent {
+  max-width: 90vw;
+  max-height: 80vh;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.imageModalClose {
+  margin-top: 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 0.75rem 2rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.imageModalClose:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.settingsPlaceholder {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--text-dim);
+  background: var(--bg-card);
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  margin-top: 2rem;
 }
