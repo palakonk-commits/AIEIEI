@@ -5,7 +5,6 @@ import { apiAdminAuth, apiAdminPlayers, apiAdminApprove, apiAdminDelete } from '
 import { Toast, ConfirmModal } from './SharedModals';
 import s from './AdminPage.module.css';
 import AdminSidebar from './AdminSidebar';
-import AdminQuestionBuilder from './AdminQuestionBuilder';
 
 const BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
@@ -279,10 +278,6 @@ export default function AdminPage() {
               )}
             </div>
           </>
-        )}
-
-        {currentView === 'questions' && (
-          <AdminQuestionBuilder />
         )}
 
         {currentView === 'settings' && (

@@ -1,11 +1,10 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Users, Database, Settings } from 'lucide-react';
+import { Menu, X, Users, Settings } from 'lucide-react';
 import s from './AdminSidebar.module.css';
 
 export default function AdminSidebar({ isOpen, toggleMenu, currentView, setView }) {
   const menuItems = [
     { id: 'players', label: 'จัดการผู้เล่น', icon: <Users size={20} strokeWidth={1.5} /> },
-    { id: 'questions', label: 'จัดการชุดคำถาม', icon: <Database size={20} strokeWidth={1.5} /> },
     { id: 'settings', label: 'ตั้งค่าระบบ', icon: <Settings size={20} strokeWidth={1.5} /> }
   ];
 
