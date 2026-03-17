@@ -57,11 +57,6 @@ export async function apiUploadPhoto(code, file) {
   return fetch(`${BASE}/api/upload`, { method: 'POST', body: fd }).then(json);
 }
 
-/** Get system levels */
-export async function apiGetLevels() {
-  return fetch(`${BASE}/api/levels`).then(json);
-}
-
 // ── Admin ──
 
 /** Verify admin password */
@@ -102,22 +97,5 @@ export async function apiAdminDelete(password, code) {
   return fetch(`${BASE}/api/admin/player/${encodeURIComponent(code)}`, {
     method: 'DELETE',
     headers: { 'x-admin-password': password },
-  }).then(json);
-}
-
-export async function apiAdminGetLevels(password) {
-  return fetch(`${BASE}/api/admin/levels`, {
-    headers: { 'x-admin-password': password },
-  }).then(json);
-}
-
-export async function apiAdminSaveLevels(password, levels) {
-  return fetch(`${BASE}/api/admin/levels`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-admin-password': password,
-    },
-    body: JSON.stringify(levels),
   }).then(json);
 }

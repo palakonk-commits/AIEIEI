@@ -47,14 +47,7 @@ async function initDB() {
       updated_at TIMESTAMP DEFAULT NOW()
     )
   `);
-
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS system_config (
-      key VARCHAR(50) PRIMARY KEY,
-      value JSONB
-    )
-  `);
-
+  
   // Migration: Add answers column if it doesn't exist
   try {
     await pool.query(`ALTER TABLE players ADD COLUMN IF NOT EXISTS answers JSONB DEFAULT '[]'`);
@@ -64,101 +57,10 @@ async function initDB() {
     console.log('Migration answers column already exists or error:', e.message);
   }
 
-  // Initialize default levels config if missing
-  const res = await pool.query(`SELECT value FROM system_config WHERE key = 'levels'`);
-  if (res.rows.length === 0) {
-    const defaultLevels = [
-      {
-        id: 1, icon: 'ShieldQuestion', label: 'ขั้นที่ 1',
-        title: 'การประเมินเบื้องต้น',
-        type: 'choice-all-correct',
-        desc: 'เลือกระเบียบวิธีเพื่อดำเนินการต่อ ระบบจะยอมรับการตัดสินใจของคุณ',
-        question: 'คุณพร้อมที่จะเริ่มต้นกระบวนการหรือไม่?',
-        choices: [
-          { text: 'ยืนยันและดำเนินการ', ok: true },
-          { text: 'ข้ามขั้นและดำเนินการต่อ', ok: true },
-          { text: 'รับทราบข้อตกลง', ok: true },
-          { text: 'อนุมัติการเข้าถึง', ok: true },
-        ],
-        clue: 'หมู',
-      },
-      {
-        id: 2, icon: 'Hash', label: 'ขั้นที่ 2',
-        title: 'ตรรกะเชิงคณิตศาสตร์',
-        type: 'choice-hidden-5th',
-        desc: 'วิเคราะห์โครงสร้างข้อมูลอย่างละเอียด บางตัวแปรอาจถูกซ่อนไว้ในระบบ',
-        question: 'หาก 5 + 5 = 10\nจงประเมินค่า: 20 + 20',
-        choices: [
-          { text: '30', ok: false },
-          { text: '50', ok: false },
-          { text: '100', ok: false },
-          { text: '20', ok: false },
-        ],
-        hiddenChoice: { text: '40', ok: true },
-        clue: 'พาหนะเฉพาะตัว',
-      },
-      {
-        id: 3, icon: 'Terminal', label: 'ขั้นที่ 3',
-        title: 'ชุดคำสั่งที่ถูกเข้ารหัส',
-        type: 'choice-pin-unlock',
-        desc: 'ตรวจพบการเข้ารหัสลับ ระบุรหัสผ่าน PIN 6 หลักเพื่อปลดล็อกตัวเลือก',
-        pinLength: 6,
-        question: 'วิเคราะห์ชุดคำสั่ง: print("Code")\nจงระบุภาษาและผลลัพธ์ที่ได้',
-        choices: [
-          { text: 'Python — ผลลัพธ์: "Code"', ok: true },
-          { text: 'C++ — ผลลัพธ์: "Code"', ok: false },
-          { text: 'HTML — ผลลัพธ์: "Code"', ok: false },
-        ],
-        clue: '15',
-      },
-      {
-        id: 4, icon: 'Database', label: 'ขั้นที่ 4',
-        title: 'การแยกตัวแปรข้อมูล',
-        type: 'choice-image-reveal',
-        desc: 'ประมวลผลข้อมูลจำลองด้านล่าง และระบุตำแหน่งของตัวแปร',
-        codeSnippet: 'name = "Code"\nprint(name)',
-        question: 'องค์ประกอบใดทำหน้าที่เป็นตัวแปรในระบบนี้?',
-        choices: [
-          { text: 'Code', ok: false },
-          { text: 'name', ok: true },
-          { text: 'print', ok: false },
-        ],
-        revealImage: '/level4.jpg',
-        clue: 'บุคคลสำคัญ',
-      },
-      {
-        id: 5, icon: 'Camera', label: 'ขั้นที่ 5',
-        title: 'การยืนยันทางกายภาพ',
-        type: 'upload',
-        desc: 'ส่งมอบหลักฐานทางภาพถ่ายที่เกี่ยวข้องกับเป้าหมายเพื่ออนุมัติขั้นสุดท้าย',
-        question: 'อัปโหลดภาพถ่ายเพื่อประมวลผลการยืนยัน',
-        choices: [],
-        revealImages: ['/level5-1.jpg', '/level5-2.png', '/level5-3.jpg'],
-        clue: 'เรื่องราว',
-      }
-    ];
-    await pool.query(`INSERT INTO system_config (key, value) VALUES ('levels', $1)`, [JSON.stringify(defaultLevels)]);
-  }
-
   console.log('✅ Database ready');
 }
 
 // ─── Routes ───
-
-// GET /api/levels — get all levels for players
-app.get('/api/levels', async (req, res) => {
-  try {
-    const result = await pool.query(`SELECT value FROM system_config WHERE key = 'levels'`);
-    if (result.rows.length > 0) {
-      res.json(result.rows[0].value);
-    } else {
-      res.json([]);
-    }
-  } catch (err) {
-    console.error('get levels error:', err);
-    res.status(500).json({ error: 'Server error' });
-  }
-});
 
 // POST /api/login — create or get player
 app.post('/api/login', async (req, res) => {
@@ -284,39 +186,7 @@ app.post('/api/upload', upload.single('photo'), async (req, res) => {
   }
 });
 
-// ▬▬▬ Admin Routes ▬▬▬
-
-// GET /api/admin/levels — get levels for editing
-app.get('/api/admin/levels', async (req, res) => {
-  if (req.headers['x-admin-password'] !== ADMIN_PASSWORD) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
-  try {
-    const result = await pool.query(`SELECT value FROM system_config WHERE key = 'levels'`);
-    res.json(result.rows.length > 0 ? result.rows[0].value : []);
-  } catch (err) {
-    res.status(500).json({ error: 'Server error' });
-  }
-});
-
-// PUT /api/admin/levels — update levels configuration
-app.put('/api/admin/levels', async (req, res) => {
-  if (req.headers['x-admin-password'] !== ADMIN_PASSWORD) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
-  try {
-    const levels = req.body;
-    await pool.query(`
-      INSERT INTO system_config (key, value)
-      VALUES ('levels', $1)
-      ON CONFLICT (key) DO UPDATE SET value = $1
-    `, [JSON.stringify(levels)]);
-    res.json({ ok: true });
-  } catch (err) {
-    console.error('update levels error:', err);
-    res.status(500).json({ error: 'Server error' });
-  }
-});
+// ─── Admin Routes ───
 
 // POST /api/admin/auth — verify admin password
 app.post('/api/admin/auth', (req, res) => {

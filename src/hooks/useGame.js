@@ -1,30 +1,21 @@
 ﻿import { useState, useCallback, useEffect } from 'react';
+import { LEVELS } from '../data/levels';
 import { apiProgress, apiSolve } from '../api';
 
-export default function useGame(playerCode, levels = []) {
-  const [solved, setSolved] = useState(() => Array(levels.length).fill(false));
+export default function useGame(playerCode) {
+  const [solved, setSolved] = useState(() => Array(LEVELS.length).fill(false));
   const [photoStatus, setPhotoStatus] = useState('none'); // none | pending | approved | rejected
   const [activeId, setActiveId] = useState(null);
   const [busy, setBusy] = useState(false);
 
   // Exclude locked & upload from "playable" count (upload solved by admin approval)
-  const playable = levels.filter(l => l.type !== 'locked');
+  const playable = LEVELS.filter(l => l.type !== 'locked');
   const allDone = playable.every((_, i) => {
-    const realIdx = levels.indexOf(playable[i]);
+    const realIdx = LEVELS.indexOf(playable[i]);
     return solved[realIdx];
   });
   const doneCount = solved.filter(Boolean).length;
   const playableCount = playable.length;
-
-  // Sync solved array size if levels change
-  useEffect(() => {
-    setSolved(prev => {
-      if (prev.length === levels.length) return prev;
-      const next = [...prev];
-      while (next.length < levels.length) next.push(false);
-      return next;
-    });
-  }, [levels]);
 
   // Load progress from backend on mount / playerCode change
   useEffect(() => {
