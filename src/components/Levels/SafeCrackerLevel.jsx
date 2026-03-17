@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronUp, ChevronDown, Check, RotateCcw } from 'lucide-react';
 import s from './Levels.module.css';
 
@@ -82,12 +82,28 @@ export default function SafeCrackerLevel({ level, busy, result, onChoice }) {
             </motion.button>
             
             <div style={{ 
-              fontSize: '2.5rem', fontWeight: 'bold', width: '60px', height: '80px', 
-              display: 'flex', alignItems: 'center', justifyContent: 'center', 
+              width: '60px', height: '80px', 
               background: 'var(--bg-card)', border: '2px solid var(--border-color)',
-              borderRadius: '8px', color: 'var(--text-main)'
+              borderRadius: '8px', color: 'var(--text-main)',
+              position: 'relative', overflow: 'hidden'
             }}>
-              {digit}
+              <AnimatePresence mode="popLayout" initial={false}>
+                <motion.div
+                  key={digit}
+                  initial={{ y: -50, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: 50, opacity: 0 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                  style={{
+                    position: 'absolute',
+                    width: '100%', height: '100%',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: '2.5rem', fontWeight: 'bold'
+                  }}
+                >
+                  {digit}
+                </motion.div>
+              </AnimatePresence>
             </div>
             
             <motion.button 
