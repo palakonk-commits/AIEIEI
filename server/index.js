@@ -75,10 +75,10 @@ app.post('/api/login', async (req, res) => {
     let result = await pool.query('SELECT * FROM players WHERE code = $1', [trimmed]);
 
     if (result.rows.length === 0) {
-      // Create new player with empty solved array for 8 levels
+      // Create new player with empty solved array for 10 levels
       result = await pool.query(
         'INSERT INTO players (code, solved) VALUES ($1, $2) RETURNING *',
-        [trimmed, JSON.stringify(Array(8).fill(false))]
+        [trimmed, JSON.stringify(Array(10).fill(false))]
       );
     }
 

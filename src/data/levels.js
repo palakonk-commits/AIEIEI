@@ -93,6 +93,22 @@ export const LEVELS = [
     question: 'เตรียมพร้อมรับสัญญาณ...',
     clue: 'คำใบ้สำหรับด่านที่ 8 พิมพ์สิ่งที่ต้องการตรงนี้ได้เลย',
   },
+  {
+    id: 9, icon: 'Ghost', label: 'ขั้นที่ 9',
+    title: 'หลบหนีภัยอันตราย',
+    type: 'maze',
+    desc: 'หนีเอาชีวิตรอดจากผู้ล่าที่กำลังตามติดคุณ',
+    question: 'จงเอาตัวรอดจากการไล่ล่า!',
+    clue: 'คำใบ้ด่าน 9',
+  },
+  {
+    id: 10, icon: 'Swords', label: 'ขั้นที่ 10',
+    title: 'บททดสอบสุดท้าย',
+    type: 'boss-clicker',
+    desc: 'โจมตีระบบให้ราบคาบก่อนเวลาจะหมดลง',
+    question: 'ทำลายกำแพงระบบสุดท้าย!',
+    clue: 'คำใบ้ด่าน 10',
+  }
 ];
 
 export const ALL_CLUES = [
@@ -104,4 +120,6 @@ export const ALL_CLUES = [
   { icon: 'Gamepad2', text: 'คำใบ้ด่าน 6' },
   { icon: 'Unlock', text: 'คำใบ้ด่าน 7' },
   { icon: 'Cpu', text: 'คำใบ้ด่าน 8' },
+  { icon: 'Ghost', text: 'คำใบ้ด่าน 9' },
+  { icon: 'Swords', text: 'คำใบ้ด่าน 10' },
 ];
