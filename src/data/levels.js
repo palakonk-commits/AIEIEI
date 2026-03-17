@@ -113,13 +113,13 @@ export const LEVELS = [
 
 export const ALL_CLUES = [
   { icon: 'Fingerprint', text: 'หมู' },
-  { icon: 'Car', text: 'พาหนะเฉพาะตัว' },
+  { icon: 'Car', text: 'รถเราไม่เหมือนใครอยู่แล้ว' },
   { icon: 'Hash', text: '15' },
   { icon: 'Users', text: 'บุคคลสำคัญ' },
   { icon: 'Star', text: 'เรื่องราว' },
-  { icon: 'Gamepad2', text: 'คำใบ้ด่าน 6' },
-  { icon: 'Unlock', text: 'คำใบ้ด่าน 7' },
-  { icon: 'Cpu', text: 'คำใบ้ด่าน 8' },
-  { icon: 'Ghost', text: 'คำใบ้ด่าน 9' },
-  { icon: 'Swords', text: 'คำใบ้ด่าน 10' },
+  { icon: 'Gamepad2', text: 'A5' },
+  { icon: 'Unlock', text: '4060' },
+  { icon: 'Cpu', text: 'contact lens And ...' },
+  { icon: 'Ghost', text: 'แตะ,air force 1' },
+  { icon: 'Swords', text: 'LOVE HEE' },
 ];

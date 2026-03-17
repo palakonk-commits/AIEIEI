@@ -1,4 +1,4 @@
-﻿import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Users, Settings, Database } from 'lucide-react';
 import s from './AdminSidebar.module.css';
 
