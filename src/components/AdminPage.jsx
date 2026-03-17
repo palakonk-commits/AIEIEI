@@ -282,7 +282,7 @@ export default function AdminPage() {
         )}
 
         {currentView === 'questions' && (
-          <AdminQuestionBuilder />
+          <AdminQuestionBuilder password={password} showToast={showToast} />
         )}
 
         {currentView === 'settings' && (

@@ -1,8 +1,7 @@
 ﻿import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { UserCircle } from 'lucide-react';
-import { LEVELS } from './data/levels';
-import { apiLogin, apiAcceptTerms } from './api';
+import { UserCircle, Fingerprint } from 'lucide-react';
+import { apiLogin, apiAcceptTerms, apiGetLevels } from './api';
 import useGame from './hooks/useGame';
 import EntryScreen from './components/EntryScreen';
 import TermsModal from './components/TermsModal';
@@ -18,6 +17,20 @@ export default function App() {
   const [loginError, setLoginError] = useState('');
   const [toastMsg, setToastMsg] = useState(null);
   const [toastType, setToastType] = useState('success');
+  const [levels, setLevels] = useState([]);
+  const [loadingLevels, setLoadingLevels] = useState(true);
+
+  useEffect(() => {
+    apiGetLevels()
+      .then(data => {
+        setLevels(data);
+      })
+      .catch(err => {
+        console.error('Failed to load levels', err);
+        showToast('ไม่สามารถโหลดข้อมูลคำถามได้', 'error');
+      })
+      .finally(() => setLoadingLevels(false));
+  }, []);
 
   const showToast = (msg, type = 'success') => {
     setToastMsg(msg);
@@ -25,10 +38,24 @@ export default function App() {
     setTimeout(() => setToastMsg(null), 3000);
   };
 
-  const game = useGame(playerCode);
+  const game = useGame(playerCode, levels);
   const { solved, activeId, busy, doneCount, playableCount, photoStatus, open, close, checkChoice, refreshProgress } = game;
-  const activeIdx = activeId !== null ? LEVELS.findIndex(l => l.id === activeId) : -1;
-  const activeLevel = activeIdx >= 0 ? LEVELS[activeIdx] : null;
+  const activeIdx = activeId !== null ? levels.findIndex(l => l.id === activeId) : -1;
+  const activeLevel = activeIdx >= 0 ? levels[activeIdx] : null;
+
+  if (loadingLevels) {
+    return (
+      <div className={s.root} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
+        <motion.div
+          animate={{ opacity: [0.5, 1, 0.5] }}
+          transition={{ repeat: Infinity, duration: 1.5 }}
+        >
+          <Fingerprint size={48} color="var(--neon-primary)" />
+        </motion.div>
+        <p style={{ marginTop: '1rem', color: 'var(--text-dim)' }}>กำลังเชื่อมต่อฐานข้อมูลส่วนกลาง...</p>
+      </div>
+    );
+  }
 
   // Step 1: Entry
   if (step === 'entry') {
@@ -102,11 +129,11 @@ export default function App() {
       </header>
 
       <motion.div className={s.grid} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-        {LEVELS.map((lv, i) => (
+        {levels.map((lv, i) => (
           <LevelCard
             key={lv.id}
             icon={lv.icon}
-            label={lv.label}
+            label={lv.label || `ขั้นที่ ${i + 1}`}
             title={lv.title}
             done={solved[i]}
             clue={lv.clue}
