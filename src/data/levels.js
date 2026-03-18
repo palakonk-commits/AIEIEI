@@ -28,7 +28,7 @@ export const LEVELS = [
       { text: '20', ok: false },
     ],
     hiddenChoice: { text: '40', ok: true },
-    clue: 'พาหนะเฉพาะตัว',
+    clue: 'รถเราไม่เหมือนใครอยู่แล้ว',
   },
   {
     id: 3, icon: 'Terminal', label: 'ขั้นที่ 3',
@@ -75,7 +75,7 @@ export const LEVELS = [
     type: 'tictactoe',
     desc: 'คุณมีโอกาส 3 ครั้งใน 1 ชั่วโมง เอาชนะระบบ AI ให้ได้เพื่อผ่านด่าน',
     question: 'ประลองหมากรุก XO',
-    clue: 'คำใบ้สำหรับด่านที่ 6 พิมพ์สิ่งที่ต้องการตรงนี้ได้เลย',
+    clue: 'A5',
   },
   {
     id: 7, icon: 'Unlock', label: 'ขั้นที่ 7',
@@ -83,7 +83,7 @@ export const LEVELS = [
     type: 'safecracker',
     desc: 'การสุ่มเดารหัส 3 หลัก คุณต้องหาตัวเลขที่ถูกต้องให้พบ',
     question: 'ระบบพร้อมรับชุดรหัสผ่าน 3 หลัก',
-    clue: 'คำใบ้สำหรับด่านที่ 7 พิมพ์สิ่งที่ต้องการตรงนี้ได้เลย',
+    clue: '4060',
   },
   {
     id: 8, icon: 'Cpu', label: 'ขั้นที่ 8',
@@ -91,7 +91,7 @@ export const LEVELS = [
     type: 'memorysync',
     desc: 'ระบบจะส่งสัญญาณเป็นลำดับ จงจำและทำซ้ำเพื่อกู้คืนระบบ',
     question: 'เตรียมพร้อมรับสัญญาณ...',
-    clue: 'คำใบ้สำหรับด่านที่ 8 พิมพ์สิ่งที่ต้องการตรงนี้ได้เลย',
+    clue: 'lens And ...contact',
   },
   {
     id: 9, icon: 'Ghost', label: 'ขั้นที่ 9',
@@ -99,7 +99,7 @@ export const LEVELS = [
     type: 'maze',
     desc: 'หนีเอาชีวิตรอดจากผู้ล่าที่กำลังตามติดคุณ',
     question: 'จงเอาตัวรอดจากการไล่ล่า!',
-    clue: 'คำใบ้ด่าน 9',
+    clue: 'แตะ,air force 1',
   },
   {
     id: 10, icon: 'ShieldAlert', label: 'ขั้นที่ 10',
@@ -107,7 +107,7 @@ export const LEVELS = [
     type: 'boss-clicker',
     desc: 'แตะหน้าจอค้างไว้เพื่อเชื่อมต่อพลังงานให้เต็ม 100%',
     question: 'ยืนยันตัวตนขั้นสุดท้าย',
-    clue: 'คำใบ้ด่าน 10',
+    clue: 'LOVE HEE',
   }
 ];
 
@@ -119,7 +119,7 @@ export const ALL_CLUES = [
   { icon: 'Star', text: 'เรื่องราว' },
   { icon: 'Gamepad2', text: 'A5' },
   { icon: 'Unlock', text: '4060' },
-  { icon: 'Cpu', text: 'contact lens And ...' },
+  { icon: 'Cpu', text: ' lens And ...contact' },
   { icon: 'Ghost', text: 'แตะ,air force 1' },
   { icon: 'Swords', text: 'LOVE HEE' },
 ];
